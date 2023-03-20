@@ -1,0 +1,183 @@
+.navbar {
+  border-bottom: 2px solid rgb(221, 221, 221);
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #555;
+
+  .wrapper {
+    width: 100%;
+    display: flex;
+    padding: 15px;
+    align-items: center;
+    justify-content: space-between;
+
+    .search {
+      align-items: center;
+      display: flex;
+      border: 2px solid lightgray;
+      padding: 5px;
+      border-radius: 5px;
+      width: 25%;
+      justify-content: space-between;
+
+      input {
+        border: none;
+        outline: none;
+        width: 100%;
+        background-color: transparent;
+
+        &::placeholder {
+          font-size: 12px;
+        }
+      }
+    }
+
+    .items {
+      display: flex;
+      align-items: center;
+      box-sizing: border-box;
+
+      .item {
+        display: flex;
+        align-items: center;
+        margin-right: 20px;
+        position: relative;
+        cursor: pointer;
+        padding: 5px;
+
+        .icon {
+          font-size: 25px;
+        }
+
+        .avatar {
+          height: 35px;
+          width: 35px;
+          border-radius: 50%;
+        }
+
+        .counter {
+          width: 15px;
+          height: 15px;
+          background-color: red;
+          border-radius: 50%;
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 10px;
+          font-weight: bold;
+          position: absolute;
+          top: -5px;
+          right: -5px;
+        }
+      }
+    }
+
+    .item:hover {
+      background-color: rgba(196, 196, 196, 0.322);
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+  }
+}
+
+// INI CSS UNTUK ROTATE ICON HIDE SIDEBAR, CUMA ADA BUG
+// .icon.toggle-button.arrow {
+//   transition: transform 0.3s ease-in-out;
+// }
+
+// .icon.toggle-button.arrow.rotated {
+//   transform: rotate(180deg);
+// }
+
+// INI UNTUK DROPDOWN PROFILE
+
+.dropdown {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  z-index: 1;
+  background: rgb(74, 165, 250);
+  min-width: 150px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  padding: 10px 13px;
+  border-radius: 5px;
+}
+
+.dropdown a {
+  display: flex;
+  margin-bottom: 8px;
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+}
+
+.dropdown a:last-child {
+  margin-top: 10px;
+}
+
+.dropdown a .dropdownIcon {
+  font-size: 20px;
+  margin-right: 5px;
+}
+
+.dropdown a:hover {
+  color: #fff;
+  transition: all 0.3s;
+  font-weight: bold;
+}
+
+/* Mengatur style panah */
+.dropdown::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  right: 13px;
+  border-width: 0 10px 10px 10px;
+  border-style: solid;
+  border-color: transparent transparent rgb(74, 165, 250) transparent;
+}
+
+/* Mengatur posisi panah agar mengarah ke avatar */
+.dropdown::after {
+  content: "";
+  position: absolute;
+  top: -9px;
+  right: 13px;
+  border-width: 0 8px 8px 8px;
+  border-style: solid;
+  border-color: transparent transparent rgb(74, 165, 250) transparent;
+}
+
+// UNTUK LOADING LOGOUT
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* background dengan opacity 50% */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999; /* pastikan z-index lebih tinggi dari konten lainnya */
+}
+
+.loading-spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

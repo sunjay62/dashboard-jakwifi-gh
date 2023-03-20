@@ -1,0 +1,78 @@
+.widget {
+  display: flex;
+  justify-content: space-between;
+  flex: 1;
+  padding: 10px;
+  -webkit-box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
+  box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
+  border-radius: 10px;
+  height: 100px;
+
+  &:hover {
+    cursor: pointer;
+    -webkit-box-shadow: 5px 5px 15px 5px rgba(0, 0, 0, 0.39);
+    box-shadow: 5px 5px 15px 5px rgba(0, 0, 0, 0.39);
+    transition: 0.2s;
+  }
+
+  .left,
+  .right {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .title {
+      font-weight: bold;
+      font-size: 14px;
+      color: rgb(182, 182, 182);
+    }
+
+    .counter {
+      font-size: 28px;
+      font-weight: 300;
+    }
+
+    .link {
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .percentage {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+
+      &.positive {
+        color: green;
+      }
+
+      &.negative {
+        color: red;
+      }
+    }
+
+    .icon {
+      font-size: 30px;
+      padding: 5px;
+      background-color: rgb(146, 112, 190);
+      border-radius: 5px;
+      align-self: flex-end;
+    }
+  }
+}
+
+.sidebar.close ~ .widget {
+  left: 78px;
+  width: calc(100% - 78px);
+}
+
+.widget {
+  left: 260px;
+  width: calc(100% - 260px);
+  transition: all 0.5s ease;
+}
+
+// .widget:hover .icon {
+//   font-size: 25px;
+//   transition: ease-in 0.2s;
+// }

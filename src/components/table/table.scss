@@ -1,0 +1,18 @@
+.table {
+  height: 550px;
+  padding: 20px;
+
+  .status {
+    padding: 5px;
+    border-radius: 5px;
+
+    &.Uploaded {
+      color: rgb(1, 141, 1);
+      background-color: rgba(0, 128, 0, 0.17);
+    }
+    &.Pending {
+      color: rgb(238, 181, 36);
+      background-color: rgba(218, 165, 32, 0.17);
+    }
+  }
+}

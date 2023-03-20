@@ -1,0 +1,45 @@
+/* Google font import */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+.containerWidget {
+  height: 3em;
+  width: 100%;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 25px;
+}
+
+.clients,
+.order,
+.tickets,
+.invoices,
+.inquiries {
+  display: flex;
+  gap: 5px;
+  border: 1px solid rgb(204, 204, 204);
+  padding: 5px 10px;
+  cursor: pointer;
+  max-width: max-content;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0px 0px 7px 1px rgba(0, 0, 0, 0.16);
+  -webkit-box-shadow: 0px 0px 7px 1px rgba(0, 0, 0, 0.16);
+  -moz-box-shadow: 0px 0px 7px 1px rgba(0, 0, 0, 0.16);
+
+  &:hover {
+    border: 1px solid rgb(122, 119, 119);
+    transition: all 0.3s;
+  }
+}
+
+.icon {
+  margin-top: 1px;
+  padding: 22x;
+  color: rgb(104, 104, 104);
+}
+
+.icon:last-child {
+  margin-top: 1px;
+}

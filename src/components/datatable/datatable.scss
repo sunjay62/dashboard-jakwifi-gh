@@ -1,0 +1,219 @@
+.datatable {
+  height: 550px;
+  padding-top: 20px;
+  padding-left: 45px;
+  padding-right: 45px;
+  padding-bottom: 50px;
+
+  .cellWithImg {
+    display: flex;
+    align-items: center;
+
+    .cellImg {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 20px;
+    }
+  }
+
+  .submit-btn {
+    background-color: #7451f8;
+    border: none;
+
+    &:hover {
+      background-color: #5e42c5;
+    }
+  }
+
+  .cellWithStatus {
+    padding: 5px;
+    border-radius: 5px;
+
+    &.Active {
+      color: rgb(1, 141, 1);
+      background-color: rgba(0, 128, 0, 0.17);
+    }
+    &.Disable {
+      color: rgb(255, 39, 39);
+      background-color: rgba(255, 71, 71, 0.17);
+    }
+  }
+  .cellWithAdmin {
+    padding: 5px;
+    border-radius: 5px;
+
+    &.Admin {
+      color: rgb(1, 141, 1);
+      background-color: rgba(0, 128, 0, 0.17);
+    }
+    &.User {
+      color: rgb(255, 39, 39);
+      background-color: rgba(255, 71, 71, 0.17);
+    }
+  }
+
+  .cellAction {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    .viewButtonOperator {
+      padding: 5px 5px;
+      border-radius: 5px;
+      color: rgb(18, 18, 165);
+      cursor: pointer;
+
+      .viewIcon {
+        margin-bottom: -6px;
+        margin-top: 1px;
+      }
+
+      &:hover {
+        background-color: rgba(0, 0, 139, 0.17);
+        transition: 0.2s;
+      }
+    }
+
+    .deleteButtonOperator {
+      padding: 5px 5px;
+      border-radius: 5px;
+      color: rgb(255, 50, 50);
+      cursor: pointer;
+
+      &:hover {
+        background-color: rgba(255, 50, 50, 0.17);
+        transition: 0.2s;
+      }
+    }
+  }
+}
+
+.MuiTablePagination-displayedRows {
+  margin-top: 17px;
+  margin-right: -20px;
+}
+
+.MuiTablePagination-selectLabel {
+  margin-top: 17px;
+}
+
+.new-account {
+  background-color: #449ff5;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+  border: none;
+  padding: 5px;
+  box-shadow: 0px 0px 5px #7451f8;
+  cursor: pointer;
+  margin-bottom: 20px;
+
+  span {
+    font-size: 15px;
+    margin-right: 10px;
+  }
+
+  &:hover {
+    transition: all 0.2s ease-out;
+    box-shadow: 0px 0px 10px #7451f8;
+    background-color: #027cef;
+  }
+
+  .iconAdd {
+    font-size: 25px;
+    margin-bottom: -6px;
+    margin-left: 5px;
+    margin-right: 10px;
+  }
+}
+
+.close-btn {
+  border: none;
+  background-color: gray;
+}
+
+#status {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.checkboxChange {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.MuiTablePagination-selectLabel {
+  margin-top: -1px;
+  margin-right: -10px;
+}
+
+.MuiTablePagination-displayedRows {
+  margin-top: -1px;
+}
+
+.MuiSvgIcon-root {
+  margin-top: -2px;
+}
+
+.loadingContainer {
+  position: fixed;
+  top: 75px;
+  height: 100vh;
+  left: 78px;
+  background-color: rgba(0, 0, 0, 0.336);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: calc(100%);
+  transition: all 0.5s ease;
+  z-index: 100;
+}
+
+.loading {
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+  z-index: 100;
+}
+
+.mrgBottom {
+  height: 3vh;
+}
+
+// INI CSS KALO MAU BUAT NAVBAR FIXED DI ATAS TAPI ADA BUG
+
+// .sidebar.close ~ .navbarContainer {
+//   left: 78px;
+//   width: calc(100% - 78px);
+// }
+
+// .navbarContainer {
+//   position: fixed;
+//   left: 260px;
+//   width: calc(100% - 260px);
+//   background-color: #fff;
+//   box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.1);
+//   display: block;
+//   z-index: 100;
+// }
+
+// .editButton[disabled] {
+//   cursor: not-allowed;
+// }
+
+// .editButton[disabled]:before {
+//   content: "🚫";
+//   display: inline-block;
+//   margin-right: 10px;
+//   color: #ccc;
+// }
+
+// .editButton[disabled],
+// .editButton[disabled]:before {
+//   cursor: not-allowed;
+// }
