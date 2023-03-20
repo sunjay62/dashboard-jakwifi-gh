@@ -117,7 +117,7 @@ const Site = (props) => {
       // const token = localStorage.getItem("access_token");
 
       const res = await axios.put(
-        `http://172.16.26.97:5000/administrator`,
+        `http://localhost:5000/administrator`,
         changePassword
           ? {
               username: username,
@@ -200,7 +200,7 @@ const Site = (props) => {
 
       setLoading(true);
       try {
-        const res = await axios.get("http://172.16.26.97:5000/administrator", {
+        const res = await axios.get("http://localhost:5000/administrator", {
           headers: {
             "Content-Type": "application/json",
             Authorization: accessToken,
@@ -226,7 +226,7 @@ const Site = (props) => {
         const token = localStorage.getItem("access_token");
         // console.log(token);
 
-        const res = await axios.get("http://172.16.26.97:5000/administrator", {
+        const res = await axios.get("http://localhost:5000/administrator", {
           headers: {
             "Content-Type": "application/json",
             Authorization: token,
@@ -246,7 +246,7 @@ const Site = (props) => {
     try {
       const token = localStorage.getItem("access_token");
 
-      const res = await axios.delete(`http://172.16.26.97:5000/administrator`, {
+      const res = await axios.delete(`http://localhost:5000/administrator`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: token,

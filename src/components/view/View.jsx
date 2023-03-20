@@ -47,7 +47,7 @@ const View = () => {
     const accessToken = localStorage.getItem("access_token");
     const refreshToken = localStorage.getItem("refresh_token");
     axios
-      .get(`http://172.16.26.97:5000/administrator/${id}`, {
+      .get(`http://localhost:5000/administrator/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: accessToken,
@@ -84,7 +84,7 @@ const View = () => {
     const refreshToken = localStorage.getItem("refresh_token");
     const updatedUserData = { id, fullname, email, password };
     axios
-      .put(`http://172.16.26.97:5000/administrator`, updatedUserData, {
+      .put(`http://localhost:5000/administrator`, updatedUserData, {
         headers: {
           "Content-Type": "application/json",
           Authorization: accessToken,

@@ -9,7 +9,7 @@ const handleRefreshToken = async () => {
     }
 
     const data = await axios.post(
-      "http://172.16.26.97:5000/administrator/@refresh_token",
+      "http://localhost:5000/administrator/@refresh_token",
       {
         refresh_token: refreshToken,
       }

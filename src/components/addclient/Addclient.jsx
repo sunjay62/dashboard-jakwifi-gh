@@ -57,7 +57,7 @@ const Addclient = () => {
       const token = localStorage.getItem("access_token");
 
       const response = await axios.post(
-        "http://172.16.26.97:5000/administrator",
+        "http://localhost:5000/administrator",
         postData,
         {
           headers: {

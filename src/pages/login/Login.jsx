@@ -71,7 +71,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const data = await axios.post(
-        "http://172.16.26.97:5000/administrator/login",
+        "http://localhost:5000/administrator/login",
         {
           email,
           password,
