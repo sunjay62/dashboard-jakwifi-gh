@@ -194,6 +194,7 @@ const Addclient = () => {
               </form>
             </div>
           </div>
+          <div className="mrgBtm"></div>
         </div>
       </div>
     </>

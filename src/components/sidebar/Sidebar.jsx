@@ -70,6 +70,14 @@ const Sidebar = () => {
     }, 1000);
   };
 
+  const toProductsNew = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      navigate("/products/new");
+      setIsLoading(false);
+    }, 1000);
+  };
+
   const toService = () => {
     setIsLoading(true);
     setTimeout(() => {
@@ -249,8 +257,10 @@ const Sidebar = () => {
                   Products
                 </a>
               </li>
-              <li onClick={toService}>
-                <a href="#">Add Product</a>
+              <li onClick={toProductsNew}>
+                <a href="#" onClick={toProductsNew}>
+                  Add Product
+                </a>
               </li>
               <li>
                 <a href="#">View Products</a>

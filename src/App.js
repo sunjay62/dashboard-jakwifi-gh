@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import Addclient from "./components/addclient/Addclient";
+import Products from "./components/products/Products";
 import Datatable from "./components/datatable/Datatable";
 import Myservice from "./components/myservice/Myservice";
 import Site from "./components/site/Site";
@@ -19,6 +20,7 @@ function App() {
             <Route index element={<Login />} />
             <Route path="home" element={<Home />} />
             <Route path="/operator/new" element={<Addclient />} />
+            <Route path="/products/new" element={<Products />} />
             <Route path="/operator/list" element={<Datatable />} />
             <Route path="/service" element={<Myservice />} />
             <Route path="/site" element={<Site />} />
