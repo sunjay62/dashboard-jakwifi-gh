@@ -185,6 +185,7 @@ const Datatable = (props) => {
 
         setUsers(res.data.data);
       } catch (e) {
+        console.log("access token expired");
         handleRefreshToken();
         setError(e);
       } finally {

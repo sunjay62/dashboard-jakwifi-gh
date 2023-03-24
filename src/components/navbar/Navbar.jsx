@@ -58,6 +58,8 @@ const Navbar = ({ handleClick }) => {
       setLogoutSuccess(true);
       localStorage.removeItem("access_token");
       Cookie.remove("access_token");
+      localStorage.removeItem("refresh_token");
+      Cookie.remove("refresh_token");
       navigate("/");
       // Clear logout success message after 2 seconds
       setTimeout(() => {
