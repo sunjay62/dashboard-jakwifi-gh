@@ -12,7 +12,7 @@ const Leafletmap = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3003/markers")
+      .get("http://localhost:3001/markers")
       .then((response) => {
         setMarkers(response.data);
       })

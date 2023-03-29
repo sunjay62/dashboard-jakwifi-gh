@@ -11,6 +11,7 @@ import PersonSearchOutlinedIcon from "@mui/icons-material/PersonSearchOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Cookie from "js-cookie";
+import axios from "axios";
 
 const Navbar = ({ handleClick }) => {
   // INI CSS UNTUK ROTATE ICON HIDE SIDEBAR, CUMA ADA BUG
@@ -50,7 +51,41 @@ const Navbar = ({ handleClick }) => {
 
   // REMOVE TOKEN UNTUK LOGOUT
 
-  const logout = () => {
+  const logout = async () => {
+    const accessToken = localStorage.getItem("access_token");
+
+    try {
+      const refreshToken = localStorage.getItem("refresh_token");
+
+      console.log(refreshToken);
+
+      const data = await axios.post(
+        "http://172.16.26.97:5000/administrator/logout",
+
+        { refresh_token: refreshToken },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: accessToken,
+          },
+        }
+      );
+
+      console.log(data);
+
+      if (data.status === 200) {
+        localStorage.removeItem("access_token");
+        Cookie.remove("access_token");
+        localStorage.removeItem("refresh_token");
+        Cookie.remove("refresh_token");
+      } else {
+        console.log(data);
+      }
+    } catch (err) {
+      console.log(err);
+      navigate("/");
+    }
+
     setLoading(true);
     // Simulate API request to logout
     setTimeout(() => {

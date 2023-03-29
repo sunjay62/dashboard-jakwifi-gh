@@ -52,6 +52,7 @@ const Login = () => {
   const userRef = useRef();
   const errRef = useRef();
   const [error, setError] = useState(false);
+  const [remember, setRemember] = useState(false);
   const [validated, setValidated] = useState(false);
   const [email, setEmail] = useState("");
   const [errMsg, setErrMsg] = useState("");
@@ -59,6 +60,10 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [refreshTokenTimeoutId, setRefreshTokenTimeoutId] = useState(null);
+
+  const handleRememberMeChange = (event) => {
+    setRemember(event.target.checked);
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("access_token");
@@ -75,6 +80,7 @@ const Login = () => {
         {
           email,
           password,
+          remember,
         }
       );
 
@@ -144,7 +150,13 @@ const Login = () => {
                   </div>
                   <div className="links">
                     <div className="remember">
-                      <input type="checkbox" id="remember" name="remember" />
+                      <input
+                        type="checkbox"
+                        id="remember"
+                        name="remember"
+                        onChange={handleRememberMeChange}
+                        checked={remember}
+                      />
                       <label for="remember">&nbsp;&nbsp;Remember me</label>
                     </div>
                     <div className="forget">

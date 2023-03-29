@@ -285,12 +285,12 @@ const Sidebar = () => {
               </li>
               <li onClick={toClient}>
                 <a href="#" onClick={toClient}>
-                  Add Client
+                  Add Reseller
                 </a>
               </li>
               <li onClick={toDatatable}>
                 <a href="#" onClick={toDatatable}>
-                  List Client
+                  List Reseller
                 </a>
               </li>
             </ul>
