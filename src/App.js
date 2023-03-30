@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import Addclient from "./components/addclient/Addclient";
+import Hsprofile from "./components/hsprofile/Hsprofile";
 import Products from "./components/products/Products";
 import Datatable from "./components/datatable/Datatable";
 import Myservice from "./components/myservice/Myservice";
@@ -19,9 +20,10 @@ function App() {
           <Route path="/">
             <Route index element={<Login />} />
             <Route path="home" element={<Home />} />
-            <Route path="/operator/new" element={<Addclient />} />
+            <Route path="/reseller/new" element={<Addclient />} />
+            <Route path="/hotspot/profile" element={<Hsprofile />} />
             <Route path="/products/new" element={<Products />} />
-            <Route path="/operator/list" element={<Datatable />} />
+            <Route path="/reseller/list" element={<Datatable />} />
             <Route path="/service" element={<Myservice />} />
             <Route path="/site" element={<Site />} />
             <Route path="/site/map" element={<Leafletmap />} />

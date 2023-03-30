@@ -65,7 +65,14 @@ const Sidebar = () => {
   const toClient = () => {
     setIsLoading(true);
     setTimeout(() => {
-      navigate("/operator/new");
+      navigate("/reseller/new");
+      setIsLoading(false);
+    }, 1000);
+  };
+  const toHsprofile = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      navigate("/hotspot/profile");
       setIsLoading(false);
     }, 1000);
   };
@@ -89,7 +96,7 @@ const Sidebar = () => {
   const toDatatable = () => {
     setIsLoading(true);
     setTimeout(() => {
-      navigate("/operator/list");
+      navigate("/reseller/list");
       setIsLoading(false);
     }, 1000);
   };
@@ -272,7 +279,7 @@ const Sidebar = () => {
               <a href="#">
                 {/* <i className="bx bxs-user-detail"></i> */}
                 <ManageAccountsIcon className="i" />
-                <span className="link-name">Operator</span>
+                <span className="link-name">Reseller</span>
               </a>
               {/* <i className="bx bx-chevron-down arrow"></i> */}
               <KeyboardArrowDownIcon className="arrow " />
@@ -280,7 +287,7 @@ const Sidebar = () => {
             <ul className="sub-menu">
               <li>
                 <a className="link-name" href="#">
-                  Operator
+                  Reseller
                 </a>
               </li>
               <li onClick={toClient}>
@@ -300,12 +307,12 @@ const Sidebar = () => {
             <a href="#">
               {/* <i className="bx bxs-bar-chart-alt-2"></i> */}
               <AddchartIcon className="i" />
-              <span className="link-name">Hotspot</span>
+              <span className="link-name">Reseller</span>
             </a>
             <ul className="sub-menu blank">
               <li>
                 <a className="link-name" href="#">
-                  Hotspot
+                  Reseller
                 </a>
               </li>
             </ul>
@@ -343,7 +350,7 @@ const Sidebar = () => {
               <a href="#">
                 {/* <i className="bx bxs-plug"></i> */}
                 <ExtensionIcon className="i" />
-                <span className="link-name">Reseller</span>
+                <span className="link-name">Hotspot</span>
               </a>
               {/* <i className="bx bx-chevron-down arrow"></i> */}
               <KeyboardArrowDownIcon className="arrow" />
@@ -351,17 +358,16 @@ const Sidebar = () => {
             <ul className="sub-menu">
               <li>
                 <a className="link-name" href="#">
-                  Reseller
+                  Hotspot
+                </a>
+              </li>
+              <li onClick={toHsprofile}>
+                <a href="#" onClick={toHsprofile}>
+                  Hotspot Profile
                 </a>
               </li>
               <li>
-                <a href="#">UI Face</a>
-              </li>
-              <li>
-                <a href="#">Pigments</a>
-              </li>
-              <li>
-                <a href="#">Box Icons</a>
+                <a href="#">Template Plan</a>
               </li>
             </ul>
           </li>

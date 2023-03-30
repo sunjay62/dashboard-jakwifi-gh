@@ -98,7 +98,7 @@ const Addclient = () => {
             <WidgetTwo />
           </div>
           <div className="top">
-            <h1>Add New User</h1>
+            <h1>Add New Reseller</h1>
           </div>
           <div className="bottom">
             <div className="left">
