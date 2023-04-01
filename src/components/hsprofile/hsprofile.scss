@@ -1,0 +1,193 @@
+.new {
+  display: flex;
+}
+
+.newContainer {
+  position: relative;
+  left: 260px;
+  width: calc(100% - 260px);
+  height: 100vh;
+  transition: all 0.5s ease;
+}
+
+.sidebar.close ~ .newContainer {
+  left: 78px;
+  width: calc(100% - 78px);
+}
+
+.top {
+  // background-color: #027cef;
+  margin: 20px;
+  padding: 10px;
+  -webkit-box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
+  box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
+  display: flex;
+
+  h1 {
+    color: rgb(97, 192, 255);
+    font-size: 25px;
+  }
+}
+
+.containerForm {
+  margin: 20px;
+  padding: 10px;
+  display: flex;
+  gap: 15px;
+  border-radius: 7px;
+  -webkit-box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
+  box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
+
+  .leftForm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+    width: 100%;
+
+    h1 {
+      background-color: #fff;
+      border-radius: 7px;
+      -webkit-box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
+      box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
+      font-size: 1.5rem;
+      width: 85%;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 15px;
+      padding: 5px 10px;
+    }
+
+    .formSection {
+      height: 65vh;
+      width: 100%;
+    }
+  }
+
+  .rightForm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+    width: 100%;
+    padding-right: 30px;
+
+    h1 {
+      background-color: #fff;
+      border-radius: 7px;
+      -webkit-box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
+      box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
+      font-size: 1.5rem;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 15px;
+      padding: 5px 10px;
+    }
+
+    .listSection {
+      height: 65vh;
+      width: 100%;
+
+      .tableSection {
+        height: 55vh;
+        border-radius: 10px;
+        -webkit-box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
+        box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
+      }
+    }
+  }
+}
+
+.MuiDataGrid-main {
+  height: 65vh;
+}
+
+.formHs {
+  margin: 0 auto;
+  background-color: #fff;
+  height: 85%;
+  width: 85%;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  -webkit-box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
+  box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
+
+  .formInput {
+    width: 75%;
+    margin-bottom: -15%;
+
+    label {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+
+      .icon {
+        cursor: pointer;
+      }
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-bottom: 1px solid gray;
+    }
+  }
+
+  button {
+    width: 150px;
+    height: 35px;
+    border: none;
+    font-weight: bold;
+    background-color: rgb(84, 163, 82);
+    cursor: pointer;
+    color: white;
+    border-radius: 5px;
+    -webkit-box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.27);
+    box-shadow: 1px 4px 12px 4px rgba(0, 0, 0, 0.27);
+
+    &:hover {
+      background-color: rgb(51, 151, 47);
+      transition: 0.5s;
+    }
+  }
+}
+
+.cellAction {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  .viewButtonOperator {
+    padding: 5px 5px;
+    border-radius: 5px;
+    color: rgb(18, 18, 165);
+    cursor: pointer;
+
+    .viewIcon {
+      margin-bottom: -6px;
+      margin-top: 1px;
+    }
+
+    &:hover {
+      background-color: rgba(0, 0, 139, 0.17);
+      transition: 0.2s;
+    }
+  }
+
+  .deleteButtonOperator {
+    padding: 5px 5px;
+    border-radius: 5px;
+    color: rgb(255, 50, 50);
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba(255, 50, 50, 0.17);
+      transition: 0.2s;
+    }
+  }
+}
