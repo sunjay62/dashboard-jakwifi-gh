@@ -1,28 +1,70 @@
 {
+  "hotspot_profile": [
+    {
+      "name": "IBIS HOTEL - SITE NEW",
+      "id": 1
+    },
+    {
+      "name": "IBIS HOTEL - SITE NEW",
+      "id": 2
+    },
+    {
+      "name": "IBIS HOTEL - SITE NEW",
+      "id": 3
+    },
+    {
+      "name": "IBIS HOTEL - SITE NEW",
+      "id": 4
+    },
+    {
+      "name": "IBIS HOTEL - SITE NEW",
+      "id": 5
+    },
+    {
+      "name": "IBIS HOTEL - SITE 9",
+      "id": 6
+    },
+    {
+      "name": "IBIS HOTEL - SITE 9",
+      "id": 7
+    }
+  ],
   "markers": [
     {
       "id": 1,
       "alamat": "Jl. Sudirman No. 1, Jakarta Pusat",
       "client": "PT. ABC",
-      "position": [-6.2853697372824335, 106.90094236973619]
+      "position": [
+        -6.2853697372824335,
+        106.90094236973619
+      ]
     },
     {
       "id": 2,
       "alamat": "Jl. Thamrin No. 2, Jakarta Pusat",
       "client": "PT. XYZ",
-      "position": [-6.2583754627297195, 106.97069895147673]
+      "position": [
+        -6.2583754627297195,
+        106.97069895147673
+      ]
     },
     {
       "id": "TCF-11099",
       "client": "Jakwifi Site Kec Koja Kel Koja RW 005",
       "alamat": "Balai Warga Jalan raya pelabuhan , lorong t RT 09 RW 05",
-      "position": [-6.237884762921482, 106.8425559966484]
+      "position": [
+        -6.237884762921482,
+        106.8425559966484
+      ]
     },
     {
       "id": "TCF-11099",
       "client": "Jakwifi Site Kec Koja Kel Koja RW 005",
       "alamat": "Balai Warga Jalan raya pelabuhan , lorong t RT 09 RW 05",
-      "position": [-6.2985381039621275, 106.95687266602577]
+      "position": [
+        -6.2985381039621275,
+        106.95687266602577
+      ]
     }
   ]
 }

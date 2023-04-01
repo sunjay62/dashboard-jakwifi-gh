@@ -88,7 +88,7 @@ const Datatable = (props) => {
   const toClient = () => {
     setIsLoading(true);
     setTimeout(() => {
-      navigate("/operator/new");
+      navigate("/reseller/new");
       setIsLoading(false);
     }, 1000);
   };
@@ -404,7 +404,7 @@ const Datatable = (props) => {
               // rowsPerPageOptions={[5, 10, 25, 50, 100]}
               pageSize={10}
             />
-            <Modal show={showEdit} onHide={handleCloseEdit}>
+            {/* <Modal show={showEdit} onHide={handleCloseEdit}>
               <Modal.Header closeButton>
                 <Modal.Title>Edit User :</Modal.Title>
               </Modal.Header>
@@ -458,7 +458,7 @@ const Datatable = (props) => {
                   Save Changes
                 </Button>
               </Modal.Footer>
-            </Modal>
+            </Modal> */}
           </div>
           <div className="mrgBottom"></div>
         </div>

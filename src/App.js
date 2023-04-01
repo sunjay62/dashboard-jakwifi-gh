@@ -11,6 +11,7 @@ import Leafletmap from "./components/leafletmap/Leafletmap";
 import Detectobject from "./components/detectobject/Detectobject";
 import View from "./components/view/View";
 import "./style/dark.scss";
+import Hstemplate from "./components/hstemplate/Hstemplate";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path="home" element={<Home />} />
             <Route path="/reseller/new" element={<Addclient />} />
             <Route path="/hotspot/profile" element={<Hsprofile />} />
+            <Route path="/hotspot/template" element={<Hstemplate />} />
             <Route path="/products/new" element={<Products />} />
             <Route path="/reseller/list" element={<Datatable />} />
             <Route path="/service" element={<Myservice />} />

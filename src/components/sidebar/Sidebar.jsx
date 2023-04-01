@@ -69,10 +69,19 @@ const Sidebar = () => {
       setIsLoading(false);
     }, 1000);
   };
+
   const toHsprofile = () => {
     setIsLoading(true);
     setTimeout(() => {
       navigate("/hotspot/profile");
+      setIsLoading(false);
+    }, 1000);
+  };
+
+  const toHstemplate = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      navigate("/hotspot/template");
       setIsLoading(false);
     }, 1000);
   };
@@ -366,8 +375,10 @@ const Sidebar = () => {
                   Hotspot Profile
                 </a>
               </li>
-              <li>
-                <a href="#">Template Plan</a>
+              <li onClick={toHstemplate}>
+                <a href="#" onClick={toHstemplate}>
+                  Hotspot Template
+                </a>
               </li>
             </ul>
           </li>

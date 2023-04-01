@@ -73,7 +73,7 @@ const Addclient = () => {
         setFullname("");
         setEmail("");
         setPassword("");
-        navigate("/operator/list");
+        navigate("/reseller/list");
         toast.success("Registered Successfully.");
       } else if (response.status === 409) {
         toast.error("User already exists.");
