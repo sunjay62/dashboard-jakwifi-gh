@@ -9,9 +9,11 @@ import Myservice from "./components/myservice/Myservice";
 import Site from "./components/site/Site";
 import Leafletmap from "./components/leafletmap/Leafletmap";
 import Detectobject from "./components/detectobject/Detectobject";
-import View from "./components/view/View";
+import Viewreseller from "./components/viewreseller/Viewreseller";
 import "./style/dark.scss";
 import Hstemplate from "./components/hstemplate/Hstemplate";
+import Hsplan from "./components/hsplan/Hsplan";
+import Viewprofile from "./components/viewprofile/Viewprofile";
 
 function App() {
   return (
@@ -24,13 +26,15 @@ function App() {
             <Route path="/reseller/new" element={<Addclient />} />
             <Route path="/hotspot/profile" element={<Hsprofile />} />
             <Route path="/hotspot/template" element={<Hstemplate />} />
+            <Route path="/hotspot/type" element={<Hsplan />} />
             <Route path="/products/new" element={<Products />} />
             <Route path="/reseller/list" element={<Datatable />} />
             <Route path="/service" element={<Myservice />} />
             <Route path="/site" element={<Site />} />
             <Route path="/site/map" element={<Leafletmap />} />
             <Route path="/verification" element={<Detectobject />} />
-            <Route path="/view/:id" element={<View />} />
+            <Route path="/viewreseller/:id" element={<Viewreseller />} />
+            <Route path="/viewprofile/:id" element={<Viewprofile />} />
           </Route>
         </Routes>
       </BrowserRouter>

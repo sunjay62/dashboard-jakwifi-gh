@@ -12,6 +12,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 // import withAuth from "../WithAuth";
+import useHandleRefreshToken from "../refreshtoken/Refreshtoken";
 import { Box } from "@mui/material";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { Popconfirm } from "antd";
@@ -40,12 +41,22 @@ const Hstemplate = () => {
     loading.classList.toggle("close");
   };
   const [fullname, setFullname] = useState("");
-  const [name, setName] = useState("");
   const [access_token, setAccessToken] = useState("");
   const [error, setError] = useState("");
+  const [listTemplate, setListTemplate] = useState("");
   const navigate = useNavigate();
   const [template, setTemplate] = useState("template1");
   const [users, setUsers] = useState([]);
+  const handleRefreshToken = useHandleRefreshToken();
+  const [name, setName] = useState("");
+  const [expired, setExpired] = useState(0);
+  const [kuota, setKuota] = useState(0);
+  const [limitShared, setLimitShared] = useState(0);
+  const [price, setPrice] = useState(0);
+  const [typeId, setTypeId] = useState(0);
+  const [uptime, setUptime] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [isNameEmpty, setIsNameEmpty] = useState(false);
 
   useEffect(() => {
     // Ambil access token dari local storage
@@ -53,41 +64,155 @@ const Hstemplate = () => {
     setAccessToken(storedToken);
   }, []);
 
+  // FUNCTION GETAPI INI UNTUK MELAKUKAN GET DATA LAGI KE API JIKA BERHASIL REGISTRASI AKUN BARU
+
+  function getApi() {
+    const fetchAllUsers = async () => {
+      try {
+        const token = localStorage.getItem("access_token");
+        // console.log(token);
+
+        const response = await axios.get(
+          "http://172.16.26.97:5000/hotspot_plan/plan_template",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token,
+            },
+          }
+        );
+        setListTemplate(response.data.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchAllUsers();
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const postData = { name };
+    if (name === "" && template === "") {
+      setIsNameEmpty(true);
+    } else {
+      e.preventDefault();
+      const postData = {
+        name,
+        expired,
+        kuota,
+        limitShared,
+        price,
+        typeId,
+        uptime,
+      };
+      try {
+        const token = localStorage.getItem("access_token");
+
+        const response = await axios.post(
+          "http://172.16.26.97:5000/hotspot_plan/plan_template",
+          postData,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          setName("");
+          getApi();
+          toast.success("Registered Successfully.");
+        } else if (response.status === 409) {
+          toast.error("Template already exists.");
+        } else {
+          setError("Failed to register, please try again.");
+        }
+      } catch (error) {
+        console.error(error);
+        if (error.response && error.response.status === 409) {
+          toast.error("Template already exists.");
+        } else {
+          setError("Failed to register, please try again.");
+          await handleRefreshToken();
+        }
+        if (error.response && error.response.status === 401) {
+          // toast.error("You not have access!");
+        } else {
+          setError("Failed to register, please try again.");
+          await handleRefreshToken();
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const accessToken = localStorage.getItem("access_token");
+      const refreshToken = localStorage.getItem("refresh_token");
+
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          "http://172.16.26.97:5000/hotspot_plan/plan_template",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: accessToken,
+            },
+          }
+        );
+
+        console.log("test");
+        setListTemplate(response.data.data);
+        console.log(response.data.data);
+        console.log(JSON.stringify(response.data.data));
+      } catch (e) {
+        console.log(e);
+        await handleRefreshToken();
+        console.log("access token sudah expired");
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // INI UNTUK DELETE USER
+
+  const deleteAccount = async (id) => {
     try {
       const token = localStorage.getItem("access_token");
 
-      const response = await axios.post(
-        "http://localhost:3001/hotspot_profile",
-        postData,
+      const res = await axios.delete(
+        `http://172.16.26.97:5000/hotspot_plan/plan_template`,
         {
           headers: {
             "Content-Type": "application/json",
             Authorization: token,
           },
+          data: {
+            id: `${id}`,
+          },
         }
       );
-
-      console.log(response.status);
-
-      if (response.status === 200) {
-        setName("");
-        toast.success("Registered Successfully.");
-      } else if (response.status === 409) {
-        toast.error("User already exists.");
+      if (res.status === 200) {
+        toast.success("Deleted Successfuly.");
+        // toast.error("Deleted Successfuly!", {
+        //   position: toast.POSITION.TOP_CENTER,
+        // });
+        getApi();
+      } else {
+        toast.error("Failed to delete user, please try again.");
+        await handleRefreshToken();
+      }
+    } catch (err) {
+      if (error.response && error.response.status === 401) {
+        // toast.error("You not have access!");
       } else {
         setError("Failed to register, please try again.");
+        await handleRefreshToken();
       }
-    } catch (error) {
-      console.error(error);
-      setError("Failed to register, please try again.");
     }
   };
-
-  const [file, setFile] = useState("");
-
   const actionColumn = [
     {
       field: "action",
@@ -111,7 +236,7 @@ const Hstemplate = () => {
                     className="cellAction"
                     title="Delete Account"
                     description="Are you sure to delete this account?"
-                    // onConfirm={() => deleteAccount(rowData.id)}
+                    onConfirm={() => deleteAccount(rowData.id)}
                     icon={
                       <QuestionCircleOutlined
                         style={{
@@ -164,41 +289,99 @@ const Hstemplate = () => {
           <div className="top">
             <h1>Hotspot Template</h1>
           </div>
-          <div className="containerForm">
-            <div className="leftForm">
-              <div className="formSection">
-                <h1>Add New Hotspot Profile</h1>
-                <form className="formHs">
-                  <div className="formInput">
-                    <label htmlFor="profile-name">Profile Name :</label>
-                    <input
-                      type="text"
-                      id="profile-name"
-                      name="profile-name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="formInput">
-                    <label htmlFor="template">Template Plan :</label>
-                    <select id="template" name="template" value={template}>
-                      <option value="template1">Template 1</option>
-                      <option value="template2">Template 2</option>
-                      <option value="template3">Template 3</option>
-                      <option value="template4">Template 4</option>
-                    </select>
-                  </div>
-
-                  <button type="submit" onClick={handleSubmit}>
-                    Create Profile
-                  </button>
-                </form>
+          <div className="containerTemplate">
+            <div className="leftTemplate">
+              <div className="templateSection">
+                <h1>Add New Hotspot Template</h1>
+                <div className="templateInput">
+                  <form className="formTemplate">
+                    <div className="formInput">
+                      <label>Name</label>
+                      <input
+                        type="text"
+                        placeholder="Name"
+                        required
+                        value={name}
+                        onChange={(e) => {
+                          setName(e.target.value);
+                          setIsNameEmpty(false);
+                        }}
+                      />
+                    </div>
+                    <div className="formInput">
+                      <label>Kuota</label>
+                      <input
+                        type="number"
+                        placeholder="Kuota"
+                        required="required"
+                        value={kuota}
+                        onChange={(e) => {
+                          setKuota(e.target.value);
+                          setIsNameEmpty(false);
+                        }}
+                      />
+                    </div>
+                    <div className="formInput">
+                      <label>Limit Shared</label>
+                      <input
+                        type="number"
+                        placeholder="Limit Shared"
+                        required="required"
+                        value={limitShared}
+                        onChange={(e) => {
+                          setLimitShared(e.target.value);
+                          setIsNameEmpty(false);
+                        }}
+                      />
+                    </div>
+                    <div className="formInput">
+                      <label>Price</label>
+                      <input
+                        type="number"
+                        placeholder="Price"
+                        value={price}
+                        onChange={(e) => {
+                          setPrice(e.target.value);
+                          setIsNameEmpty(false);
+                        }}
+                      />
+                    </div>
+                    <div className="formInput">
+                      <label>Uptime</label>
+                      <input
+                        type="number"
+                        placeholder="Uptime"
+                        required="required"
+                        value={uptime}
+                        onChange={(e) => {
+                          setUptime(e.target.value);
+                          setIsNameEmpty(false);
+                        }}
+                      />
+                    </div>
+                    <div className="formInput">
+                      <label>Type</label>
+                      <input
+                        type="number"
+                        placeholder="Type"
+                        required="required"
+                        value={typeId}
+                        onChange={(e) => {
+                          setTypeId(e.target.value);
+                          setIsNameEmpty(false);
+                        }}
+                      />
+                    </div>
+                    <button type="submit" onClick={handleSubmit}>
+                      Create User
+                    </button>
+                  </form>
+                </div>
               </div>
             </div>
-            <div className="rightForm">
+            <div className="rightTemplate">
               <div className="listSection">
-                <h1>List Hotspot Profile</h1>
+                <h1>List Hotspot Template</h1>
                 <div className="tableSection">
                   <Box
                     sx={{
@@ -208,7 +391,7 @@ const Hstemplate = () => {
 
                   <DataGrid
                     columns={userColumnsNew.concat(actionColumn)}
-                    rows={addIndex(users)}
+                    rows={addIndex(listTemplate)}
                     // rowsPerPageOptions={[5, 10, 25, 50, 100]}
                     pageSize={10}
                   />

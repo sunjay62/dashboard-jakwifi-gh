@@ -2,15 +2,7 @@
   display: flex;
 }
 
-.newContainer {
-  position: relative;
-  left: 260px;
-  width: calc(100% - 260px);
-  height: 100vh;
-  transition: all 0.5s ease;
-}
-
-.sidebar.close ~ .newContainer {
+.sidebar.close ~ .containerForm {
   left: 78px;
   width: calc(100% - 78px);
 }
@@ -29,20 +21,18 @@
   }
 }
 
-.containerForm {
+.containerTemplate {
   margin: 20px;
-  padding: 10px;
   display: flex;
   gap: 15px;
+  height: 100vh;
   border-radius: 7px;
   -webkit-box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
   box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
 
-  .leftForm {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 70vh;
+  .leftTemplate {
+    padding: 40px 25px;
+    height: 80vh;
     width: 100%;
 
     h1 {
@@ -51,7 +41,7 @@
       -webkit-box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
       box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
       font-size: 1.5rem;
-      width: 85%;
+      width: 100%;
       margin: 0 auto;
       display: flex;
       justify-content: center;
@@ -59,19 +49,19 @@
       padding: 5px 10px;
     }
 
-    .formSection {
-      height: 65vh;
+    .formTemplate {
+      height: 75vh;
       width: 100%;
     }
   }
 
-  .rightForm {
+  .rightTemplate {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 70vh;
+    height: 80vh;
     width: 100%;
-    padding-right: 30px;
+    padding: 25px 25px;
 
     h1 {
       background-color: #fff;
@@ -92,7 +82,7 @@
       width: 100%;
 
       .tableSection {
-        height: 55vh;
+        height: 75vh;
         border-radius: 10px;
         -webkit-box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
         box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
@@ -105,61 +95,66 @@
   height: 65vh;
 }
 
-.formHs {
+.formTemplate {
   margin: 0 auto;
   background-color: #fff;
-  height: 85%;
+  height: 100%;
   width: 85%;
   border-radius: 6px;
   display: grid;
   place-items: center;
   -webkit-box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
   box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
+}
 
-  .formInput {
-    width: 75%;
-    margin-bottom: -15%;
+.templateInput {
+  width: 100%;
+  height: 60vh;
 
-    label {
-      display: flex;
-      align-items: center;
-      margin-bottom: 10px;
+  form {
+    padding: 25px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-around;
 
-      .icon {
-        cursor: pointer;
+    .formInput {
+      width: 40%;
+
+      label {
+        display: flex;
+        align-items: center;
+        gap: 10;
+
+        .icon {
+          cursor: pointer;
+        }
+      }
+
+      select {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-bottom: 1px solid gray;
       }
     }
 
-    input {
-      width: 100%;
-      padding: 10px;
+    button {
+      width: 150px;
+      height: 35px;
       border: none;
-      border-bottom: 1px solid gray;
-    }
+      font-weight: bold;
+      background-color: rgb(84, 163, 82);
+      cursor: pointer;
+      color: white;
+      border-radius: 5px;
+      -webkit-box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.27);
+      box-shadow: 1px 4px 12px 4px rgba(0, 0, 0, 0.27);
 
-    select {
-      width: 100%;
-      padding: 5px;
-      border: none;
-      border-bottom: 1px solid gray;
-    }
-  }
-
-  button {
-    width: 150px;
-    height: 35px;
-    border: none;
-    font-weight: bold;
-    background-color: rgb(84, 163, 82);
-    cursor: pointer;
-    color: white;
-    border-radius: 5px;
-    -webkit-box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.27);
-    box-shadow: 1px 4px 12px 4px rgba(0, 0, 0, 0.27);
-
-    &:hover {
-      background-color: rgb(51, 151, 47);
-      transition: 0.5s;
+      &:hover {
+        background-color: rgb(51, 151, 47);
+        transition: 0.5s;
+      }
     }
   }
 }

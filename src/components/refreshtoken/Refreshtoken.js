@@ -1,49 +1,54 @@
-// import axios from "axios";
-// import Cookies from "js-cookie";
-// import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import Cookies from "js-cookie";
+import Cookie from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
-// const useHandleRefreshToken = () => {
-//   const navigate = useNavigate();
+const useHandleRefreshToken = () => {
+  const navigate = useNavigate();
 
-//   const handleRefreshToken = async () => {
-//     try {
-//       const refreshToken = localStorage.getItem("refresh_token");
-//       if (!refreshToken) {
-//         throw new Error("Refresh token not found");
-//         navigate("/");
-//       }
+  const handleRefreshToken = async () => {
+    try {
+      const refreshToken = localStorage.getItem("refresh_token");
+      if (!refreshToken) {
+        throw new Error("Refresh token not found");
+      }
 
-//       console.log(refreshToken);
+      console.log(refreshToken);
 
-//       const data = await axios.post(
-//         "http://172.16.26.97:5000/administrator/@refresh_token",
-//         {
-//           refresh_token: refreshToken,
-//         }
-//       );
+      const data = await axios.post(
+        "http://172.16.26.97:5000/administrator/@refresh_token",
+        {
+          refresh_token: refreshToken,
+        }
+      );
 
-//       console.log(data);
+      console.log(data);
 
-//       if (data.status === 200) {
-//         // Set access token in cookie, which will be deleted when the browser is closed
-//         Cookies.set("access_token", data.data.access_token, {
-//           expires: 0,
-//           sameSite: "strict",
-//           secure: true,
-//         });
+      if (data.status === 200) {
+        // Set access token in cookie, which will be deleted when the browser is closed
+        Cookies.set("access_token", data.data.access_token, {
+          expires: 0,
+          sameSite: "strict",
+          secure: true,
+        });
 
-//         // Set access token and refresh token in local storage
-//         localStorage.setItem("access_token", data.data.access_token);
-//       } else {
-//         console.log(data);
-//       }
-//     } catch (err) {
-//       console.log(err);
-//       navigate("/");
-//     }
-//   };
+        // Set access token and refresh token in local storage
+        localStorage.setItem("access_token", data.data.access_token);
+      } else {
+        console.log(data);
+      }
+    } catch (err) {
+      console.log(err);
+      navigate("/");
+      //   localStorage.removeItem("access_token");
+      //   Cookie.remove("access_token");
+      //   localStorage.removeItem("refresh_token");
+      //   Cookie.remove("refresh_token");
+      console.log("gagal");
+    }
+  };
 
-//   return handleRefreshToken;
-// };
+  return handleRefreshToken;
+};
 
-// export default useHandleRefreshToken;
+export default useHandleRefreshToken;

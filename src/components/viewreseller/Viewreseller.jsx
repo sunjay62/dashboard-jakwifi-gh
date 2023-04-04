@@ -1,4 +1,4 @@
-import "./view.scss";
+import "./viewreseller.scss";
 import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
@@ -14,7 +14,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import GrainIcon from "@mui/icons-material/Grain";
 import Typography from "@mui/material/Typography";
 
-const View = () => {
+const Viewreseller = () => {
   const handleClick = () => {
     const loadingContainer = document.querySelector(".loadingContainer");
     const loading = document.querySelector(".loading");
@@ -93,7 +93,7 @@ const View = () => {
       .then((response) => {
         if (response.status === 200) {
           toast.success("Updated Successfully.");
-          navigate(`/view/${id}`);
+          navigate(`/viewreseller/${id}`);
         } else {
           setError("Failed to update, please try again.");
         }
@@ -250,4 +250,4 @@ const View = () => {
   );
 };
 
-export default View;
+export default Viewreseller;

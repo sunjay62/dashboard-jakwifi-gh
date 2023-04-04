@@ -86,6 +86,14 @@ const Sidebar = () => {
     }, 1000);
   };
 
+  const toHsplan = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      navigate("/hotspot/type");
+      setIsLoading(false);
+    }, 1000);
+  };
+
   const toProductsNew = () => {
     setIsLoading(true);
     setTimeout(() => {
@@ -372,12 +380,17 @@ const Sidebar = () => {
               </li>
               <li onClick={toHsprofile}>
                 <a href="#" onClick={toHsprofile}>
-                  Hotspot Profile
+                  Profile
                 </a>
               </li>
               <li onClick={toHstemplate}>
                 <a href="#" onClick={toHstemplate}>
-                  Hotspot Template
+                  Template
+                </a>
+              </li>
+              <li onClick={toHsplan}>
+                <a href="#" onClick={toHsplan}>
+                  Type Plan
                 </a>
               </li>
             </ul>
