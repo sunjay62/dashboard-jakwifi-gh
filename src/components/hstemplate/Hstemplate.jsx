@@ -43,20 +43,21 @@ const Hstemplate = () => {
   const [fullname, setFullname] = useState("");
   const [access_token, setAccessToken] = useState("");
   const [error, setError] = useState("");
-  const [listTemplate, setListTemplate] = useState("");
+  const [listTemplate, setListTemplate] = useState([]);
   const navigate = useNavigate();
   const [template, setTemplate] = useState("template1");
   const [users, setUsers] = useState([]);
   const handleRefreshToken = useHandleRefreshToken();
   const [name, setName] = useState("");
-  const [expired, setExpired] = useState(0);
-  const [kuota, setKuota] = useState(0);
-  const [limitShared, setLimitShared] = useState(0);
-  const [price, setPrice] = useState(0);
-  const [typeId, setTypeId] = useState(0);
-  const [uptime, setUptime] = useState(0);
+  const [expired, setExpired] = useState("");
+  const [kuota, setKuota] = useState("");
+  const [limit_shared, setLimit_Shared] = useState("");
+  const [price, setPrice] = useState("");
+  const [type_id, setType_Id] = useState("");
+  const [uptime, setUptime] = useState("");
   const [loading, setLoading] = useState(true);
   const [isNameEmpty, setIsNameEmpty] = useState(false);
+  const [templates, setTemplates] = useState([]);
 
   useEffect(() => {
     // Ambil access token dari local storage
@@ -99,9 +100,9 @@ const Hstemplate = () => {
         name,
         expired,
         kuota,
-        limitShared,
+        limit_shared,
         price,
-        typeId,
+        type_id,
         uptime,
       };
       try {
@@ -133,13 +134,13 @@ const Hstemplate = () => {
           toast.error("Template already exists.");
         } else {
           setError("Failed to register, please try again.");
-          await handleRefreshToken();
+          console.log(error);
         }
         if (error.response && error.response.status === 401) {
           // toast.error("You not have access!");
         } else {
           setError("Failed to register, please try again.");
-          await handleRefreshToken();
+          console.log(error);
         }
       }
     }
@@ -164,6 +165,37 @@ const Hstemplate = () => {
 
         console.log("test");
         setListTemplate(response.data.data);
+        console.log(response.data.data);
+        console.log(JSON.stringify(response.data.data));
+      } catch (e) {
+        console.log(e);
+        await handleRefreshToken();
+        console.log("access token sudah expired");
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  //GET LIST PLAN TYPE
+  useEffect(() => {
+    const fetchData = async () => {
+      const accessToken = localStorage.getItem("access_token");
+      const refreshToken = localStorage.getItem("refresh_token");
+
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          "http://172.16.26.97:5000/hotspot_plan/plan_type",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: accessToken,
+            },
+          }
+        );
+
+        setTemplates(response.data.data);
         console.log(response.data.data);
         console.log(JSON.stringify(response.data.data));
       } catch (e) {
@@ -217,7 +249,7 @@ const Hstemplate = () => {
     {
       field: "action",
       headerName: "Action",
-      width: 175,
+      width: 125,
       renderCell: (rowData) => {
         return (
           <>
@@ -263,10 +295,10 @@ const Hstemplate = () => {
     {
       field: "no",
       headerName: "No",
-      width: 50,
+      width: 25,
     },
-    { field: "id", headerName: "ID", width: 100 },
-    { field: "fullname", headerName: "Name", width: 150 },
+    { field: "id", headerName: "ID", width: 75 },
+    { field: "name", headerName: "Name", width: 200 },
   ];
 
   // INI UNTUK PEMBUATAN NOMOR URUT SECARA OTOMATIS
@@ -289,15 +321,16 @@ const Hstemplate = () => {
           <div className="top">
             <h1>Hotspot Template</h1>
           </div>
-          <div className="containerTemplate">
-            <div className="leftTemplate">
+          <div className="containerTemplateNew">
+            <div className="leftTemplateNew">
               <div className="templateSection">
                 <h1>Add New Hotspot Template</h1>
-                <div className="templateInput">
-                  <form className="formTemplate">
-                    <div className="formInput">
+                <div className="templateInputNew">
+                  <form className="formTemplateNew">
+                    <div className="formInputTemplate">
                       <label>Name</label>
                       <input
+                        className="inputName"
                         type="text"
                         placeholder="Name"
                         required
@@ -308,7 +341,30 @@ const Hstemplate = () => {
                         }}
                       />
                     </div>
-                    <div className="formInput">
+                    <div className="formInputTemplate">
+                      <label>Plan Type</label>
+
+                      <select
+                        id="template"
+                        name="template"
+                        required
+                        value={type_id}
+                        onChange={(e) => {
+                          setType_Id(e.target.value);
+                          setIsNameEmpty(false);
+                        }}
+                      >
+                        <option value="" disabled selected>
+                          --list plan--
+                        </option>{" "}
+                        {templates.map((template) => (
+                          <option key={template.id} value={template.id}>
+                            {template.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="formInputTemplate">
                       <label>Kuota</label>
                       <input
                         type="number"
@@ -321,20 +377,20 @@ const Hstemplate = () => {
                         }}
                       />
                     </div>
-                    <div className="formInput">
+                    <div className="formInputTemplate">
                       <label>Limit Shared</label>
                       <input
                         type="number"
                         placeholder="Limit Shared"
                         required="required"
-                        value={limitShared}
+                        value={limit_shared}
                         onChange={(e) => {
-                          setLimitShared(e.target.value);
+                          setLimit_Shared(e.target.value);
                           setIsNameEmpty(false);
                         }}
                       />
                     </div>
-                    <div className="formInput">
+                    <div className="formInputTemplate">
                       <label>Price</label>
                       <input
                         type="number"
@@ -346,7 +402,7 @@ const Hstemplate = () => {
                         }}
                       />
                     </div>
-                    <div className="formInput">
+                    <div className="formInputTemplate">
                       <label>Uptime</label>
                       <input
                         type="number"
@@ -359,30 +415,30 @@ const Hstemplate = () => {
                         }}
                       />
                     </div>
-                    <div className="formInput">
-                      <label>Type</label>
+                    <div className="formInputTemplate">
+                      <label>Expired</label>
                       <input
                         type="number"
                         placeholder="Type"
                         required="required"
-                        value={typeId}
+                        value={expired}
                         onChange={(e) => {
-                          setTypeId(e.target.value);
+                          setExpired(e.target.value);
                           setIsNameEmpty(false);
                         }}
                       />
                     </div>
                     <button type="submit" onClick={handleSubmit}>
-                      Create User
+                      Create Template
                     </button>
                   </form>
                 </div>
               </div>
             </div>
-            <div className="rightTemplate">
-              <div className="listSection">
+            <div className="rightTemplateNew">
+              <div className="listSectionNew">
                 <h1>List Hotspot Template</h1>
-                <div className="tableSection">
+                <div className="tableSectionNew">
                   <Box
                     sx={{
                       width: "100%",

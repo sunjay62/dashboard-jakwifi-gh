@@ -54,6 +54,7 @@ const Hstemplate = () => {
   const [file, setFile] = useState("");
   const [isNameEmpty, setIsNameEmpty] = useState(false);
   const [id, setId] = useState("");
+  const [templates, setTemplates] = useState([]);
 
   useEffect(() => {
     // Ambil access token dari local storage
@@ -164,6 +165,37 @@ const Hstemplate = () => {
 
         console.log("test");
         setProfile(response.data.data);
+        console.log(response.data.data);
+        console.log(JSON.stringify(response.data.data));
+      } catch (e) {
+        console.log(e);
+        await handleRefreshToken();
+        console.log("access token sudah expired");
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // INI UNTUK DAPETIN DATA TEMPLATE
+  useEffect(() => {
+    const fetchData = async () => {
+      const accessToken = localStorage.getItem("access_token");
+      const refreshToken = localStorage.getItem("refresh_token");
+
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          "http://172.16.26.97:5000/hotspot_plan/plan_template",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: accessToken,
+            },
+          }
+        );
+
+        setTemplates(response.data.data);
         console.log(response.data.data);
         console.log(JSON.stringify(response.data.data));
       } catch (e) {
@@ -336,11 +368,14 @@ const Hstemplate = () => {
                         setIsNameEmpty(false);
                       }}
                     >
-                      <option></option>
-                      <option value="template1">Template 1</option>
-                      <option value="template2">Template 2</option>
-                      <option value="template3">Template 3</option>
-                      <option value="template4">Template 4</option>
+                      <option value="" disabled selected>
+                        --list template--
+                      </option>{" "}
+                      {templates.map((template) => (
+                        <option key={template.id} value={template.id}>
+                          {template.name}
+                        </option>
+                      ))}
                     </select>
                   </div>
 

@@ -56,8 +56,6 @@ const Viewprofile = () => {
       .then((res) => {
         setUserData(res.data.id);
         setName(res.data.name);
-        setEmail(res.data.email);
-        setPassword(res.data.password);
       })
       .catch((err) => console.log(err));
   }, [id]);

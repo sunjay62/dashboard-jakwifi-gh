@@ -21,16 +21,14 @@
   }
 }
 
-.containerTemplate {
+.containerTemplateNew {
   margin: 20px;
   display: flex;
   gap: 15px;
-  height: 100vh;
+  height: 120vh;
   border-radius: 7px;
-  -webkit-box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
-  box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
 
-  .leftTemplate {
+  .leftTemplateNew {
     padding: 40px 25px;
     height: 80vh;
     width: 100%;
@@ -41,7 +39,7 @@
       -webkit-box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
       box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
       font-size: 1.5rem;
-      width: 100%;
+      width: 110%;
       margin: 0 auto;
       display: flex;
       justify-content: center;
@@ -49,13 +47,13 @@
       padding: 5px 10px;
     }
 
-    .formTemplate {
-      height: 75vh;
-      width: 100%;
+    .formTemplateNew {
+      height: 90vh;
+      width: 110%;
     }
   }
 
-  .rightTemplate {
+  .rightTemplateNew {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -77,12 +75,14 @@
       padding: 5px 10px;
     }
 
-    .listSection {
-      height: 65vh;
+    .listSectionNew {
+      height: 70vh;
+      margin-top: 15px;
       width: 100%;
 
-      .tableSection {
-        height: 75vh;
+      .tableSectionNew {
+        height: 90vh;
+        width: 85vh;
         border-radius: 10px;
         -webkit-box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
         box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
@@ -95,30 +95,31 @@
   height: 65vh;
 }
 
-.formTemplate {
-  margin: 0 auto;
-  background-color: #fff;
-  height: 100%;
-  width: 85%;
-  border-radius: 6px;
-  display: grid;
-  place-items: center;
-  -webkit-box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
-  box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
-}
-
-.templateInput {
+.templateInputNew {
   width: 100%;
-  height: 60vh;
+  height: 95vh;
 
-  form {
+  .formTemplateNew {
     padding: 25px;
     display: flex;
     flex-wrap: wrap;
+    height: 95vh;
+    width: 100%;
     gap: 20px;
     justify-content: space-around;
+    background-color: #fff;
+    border-radius: 6px;
+    -webkit-box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
+    box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
 
-    .formInput {
+    .formInputTemplate:nth-child(1) {
+      width: 93%;
+    }
+    .formInputTemplate:nth-child(2) {
+      width: 93%;
+    }
+
+    .formInputTemplate {
       width: 40%;
 
       label {
@@ -137,6 +138,13 @@
         border: none;
         border-bottom: 1px solid gray;
       }
+
+      select {
+        width: 100%;
+        padding: 5px;
+        border: none;
+        border-bottom: 1px solid gray;
+      }
     }
 
     button {
@@ -150,6 +158,7 @@
       border-radius: 5px;
       -webkit-box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.27);
       box-shadow: 1px 4px 12px 4px rgba(0, 0, 0, 0.27);
+      margin-top: 5vh;
 
       &:hover {
         background-color: rgb(51, 151, 47);

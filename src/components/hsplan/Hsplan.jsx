@@ -24,7 +24,7 @@ import Link from "@mui/material/Link";
 import HomeIcon from "@mui/icons-material/Home";
 import GrainIcon from "@mui/icons-material/Grain";
 import { Tooltip, IconButton } from "@material-ui/core";
-import Cookies from "js-cookie";
+import useHandleRefreshToken from "../refreshtoken/Refreshtoken";
 
 const Hsplan = () => {
   const handleClick = () => {
@@ -44,14 +44,15 @@ const Hsplan = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const [template, setTemplate] = useState("template1");
-  const [users, setUsers] = useState([]);
+  const [listPlan, setListPlan] = useState([]);
   const [name, setName] = useState("");
-  const [expired, setExpired] = useState(0);
-  const [kuota, setKuota] = useState(0);
-  const [limitShared, setLimitShared] = useState(0);
-  const [price, setPrice] = useState(0);
-  const [typeId, setTypeId] = useState(0);
-  const [uptime, setUptime] = useState(0);
+  const [enable_expired, setEnable_Expired] = useState(false);
+  const [enable_kuota, setEnable_Kuota] = useState(false);
+  const [enable_limit_shared, setEnable_Limit_Shared] = useState(false);
+  const [enable_uptime, setEnable_Uptime] = useState(false);
+  const [isNameEmpty, setIsNameEmpty] = useState(false);
+  const handleRefreshToken = useHandleRefreshToken();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Ambil access token dari local storage
@@ -61,46 +62,147 @@ const Hsplan = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const postData = {
-      name,
-      expired,
-      kuota,
-      limitShared,
-      price,
-      typeId,
-      uptime,
+    if (name === "" && template === "") {
+      setIsNameEmpty(true);
+    } else {
+      // Lakukan sesuatu jika form valid
+      e.preventDefault();
+      const postData = {
+        name,
+        enable_expired,
+        enable_kuota,
+        enable_limit_shared,
+        enable_uptime,
+      };
+      try {
+        const token = localStorage.getItem("access_token");
+
+        const response = await axios.post(
+          "http://172.16.26.97:5000/hotspot_plan/plan_type",
+          postData,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token,
+            },
+          }
+        );
+
+        console.log(response.status);
+
+        if (response.status === 200) {
+          setName("");
+          getApi();
+          setEnable_Expired(false);
+          setEnable_Kuota(false);
+          setEnable_Limit_Shared(false);
+          setEnable_Uptime(false);
+          toast.success("Registered Successfully.");
+        } else if (response.status === 409) {
+          toast.error("User already exists.");
+        } else {
+          setError("Failed to register, please try again.");
+        }
+      } catch (error) {
+        console.error(error);
+        setError("Failed to register, please try again.");
+      }
+    }
+  };
+
+  //GET LIST PLAN TYPE
+  useEffect(() => {
+    const fetchData = async () => {
+      const accessToken = localStorage.getItem("access_token");
+      const refreshToken = localStorage.getItem("refresh_token");
+
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          "http://172.16.26.97:5000/hotspot_plan/plan_type",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: accessToken,
+            },
+          }
+        );
+
+        setListPlan(response.data.data);
+        console.log(response.data.data);
+        console.log(JSON.stringify(response.data.data));
+      } catch (e) {
+        console.log(e);
+        await handleRefreshToken();
+        console.log("access token sudah expired");
+      }
     };
+
+    fetchData();
+  }, []);
+
+  // FUNCTION GETAPI INI UNTUK MELAKUKAN GET DATA LAGI KE API JIKA BERHASIL REGISTRASI AKUN BARU
+
+  function getApi() {
+    const fetchAllUsers = async () => {
+      try {
+        const token = localStorage.getItem("access_token");
+        // console.log(token);
+
+        const response = await axios.get(
+          "http://172.16.26.97:5000/hotspot_plan/plan_type",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token,
+            },
+          }
+        );
+        setListPlan(response.data.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchAllUsers();
+  }
+
+  // INI UNTUK DELETE USER
+
+  const deletePlan = async (id) => {
     try {
       const token = localStorage.getItem("access_token");
 
-      const response = await axios.post(
-        "http://localhost:3001/hotspot_profile",
-        postData,
+      const res = await axios.delete(
+        "http://172.16.26.97:5000/hotspot_plan/plan_type",
         {
           headers: {
             "Content-Type": "application/json",
             Authorization: token,
           },
+          data: {
+            id: `${id}`,
+          },
         }
       );
-
-      console.log(response.status);
-
-      if (response.status === 200) {
-        setName("");
-        toast.success("Registered Successfully.");
-      } else if (response.status === 409) {
-        toast.error("User already exists.");
+      if (res.status === 200) {
+        toast.success("Deleted Successfuly.");
+        // toast.error("Deleted Successfuly!", {
+        //   position: toast.POSITION.TOP_CENTER,
+        // });
+        getApi();
+      } else {
+        toast.error("Failed to delete user, please try again.");
+        await handleRefreshToken();
+      }
+    } catch (err) {
+      if (error.response && error.response.status === 401) {
+        // toast.error("You not have access!");
       } else {
         setError("Failed to register, please try again.");
+        await handleRefreshToken();
       }
-    } catch (error) {
-      console.error(error);
-      setError("Failed to register, please try again.");
     }
   };
-
-  const [file, setFile] = useState("");
 
   const actionColumn = [
     {
@@ -125,7 +227,7 @@ const Hsplan = () => {
                     className="cellAction"
                     title="Delete Account"
                     description="Are you sure to delete this account?"
-                    // onConfirm={() => deleteAccount(rowData.id)}
+                    onConfirm={() => deletePlan(rowData.id)}
                     icon={
                       <QuestionCircleOutlined
                         style={{
@@ -155,7 +257,7 @@ const Hsplan = () => {
       width: 50,
     },
     { field: "id", headerName: "ID", width: 100 },
-    { field: "fullname", headerName: "Name", width: 150 },
+    { field: "name", headerName: "Name", width: 150 },
   ];
 
   // INI UNTUK PEMBUATAN NOMOR URUT SECARA OTOMATIS
@@ -176,49 +278,65 @@ const Hsplan = () => {
             <WidgetTwo />
           </div>
           <div className="top">
-            <h1>Hotspot Plan Type</h1>
+            <ToastContainer />
+            <h1>Hotspot Profile</h1>
           </div>
-          <div className="containerTemplate">
-            <div className="leftTemplate">
-              <div className="templateSection">
-                <h1>Add New Hotspot Plan Type</h1>
-                <div className="templateInput">
-                  <form className="formTemplate">
-                    <div className="formInput">
-                      <label>Name</label>
-                      <input type="text" placeholder="Name" />
-                    </div>
-                    <div className="formInput">
-                      <label>Kuota</label>
-                      <select name="" id="">
-                        <option value="true">Enable</option>
-                        <option value="False">Disable</option>
-                      </select>
-                    </div>
-                    <div className="formInput">
-                      <label>Limit Shared</label>
-                      <select name="" id="">
-                        <option value="true">Enable</option>
-                        <option value="False">Disable</option>
-                      </select>
-                    </div>
-                    <div className="formInput">
-                      <label>Uptime</label>
-                      <select name="" id="">
-                        <option value="true">Enable</option>
-                        <option value="False">Disable</option>
-                      </select>
-                    </div>
-                    <button type="submit" onClick={handleSubmit}>
-                      Create Plan Type
-                    </button>
-                  </form>
-                </div>
+          <div className="containerForm">
+            <div className="leftForm">
+              <div className="formSection">
+                <h1>Add New Hotspot Profile</h1>
+                <Form onSubmit={handleSubmit} className="formPlan">
+                  <div className="formInputPlan">
+                    <label>Name</label>
+                    <input
+                      className="inputName"
+                      type="text"
+                      placeholder="Name"
+                      required
+                      value={name}
+                      onChange={(e) => {
+                        setName(e.target.value);
+                        setIsNameEmpty(false);
+                      }}
+                    />
+                  </div>
+
+                  <div className="formInputPlan">
+                    <label>Kuota</label>
+                    <select name="" id="">
+                      <option value="true">Enable</option>
+                      <option value="false">Disable</option>
+                    </select>
+                  </div>
+                  <div className="formInputPlan">
+                    <label>Limit Shared</label>
+                    <select name="" id="">
+                      <option value="true">Enable</option>
+                      <option value="false">Disable</option>
+                    </select>
+                  </div>
+                  <div className="formInputPlan">
+                    <label>Uptime</label>
+                    <select name="" id="">
+                      <option value="true">Enable</option>
+                      <option value="false">Disable</option>
+                    </select>
+                  </div>
+                  <div className="formInputPlan">
+                    <label>Expired</label>
+                    <select name="" id="">
+                      <option value="true">Enable</option>
+                      <option value="false">Disable</option>
+                    </select>
+                  </div>
+
+                  <button type="submit">Create Plan Type</button>
+                </Form>
               </div>
             </div>
-            <div className="rightTemplate">
+            <div className="rightForm">
               <div className="listSection">
-                <h1>List Hotspot Template</h1>
+                <h1>List Hotspot Profile</h1>
                 <div className="tableSection">
                   <Box
                     sx={{
@@ -228,7 +346,7 @@ const Hsplan = () => {
 
                   <DataGrid
                     columns={userColumnsNew.concat(actionColumn)}
-                    rows={addIndex(users)}
+                    rows={addIndex(listPlan)}
                     // rowsPerPageOptions={[5, 10, 25, 50, 100]}
                     pageSize={10}
                   />
@@ -238,7 +356,7 @@ const Hsplan = () => {
           </div>
           <div className="mrgBtm"></div>
         </div>
-      </div>
+      </div>{" "}
     </>
   );
 };
