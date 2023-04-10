@@ -14,6 +14,7 @@ import "./style/dark.scss";
 import Hstemplate from "./components/hstemplate/Hstemplate";
 import Hsplan from "./components/hsplan/Hsplan";
 import Viewprofile from "./components/viewprofile/Viewprofile";
+import Testing from "./components/testingdisable/Testing";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="/reseller/new" element={<Addclient />} />
             <Route path="/hotspot/profile" element={<Hsprofile />} />
             <Route path="/hotspot/template" element={<Hstemplate />} />
+            <Route path="/hotspot/testing" element={<Testing />} />
             <Route path="/hotspot/type" element={<Hsplan />} />
             <Route path="/products/new" element={<Products />} />
             <Route path="/reseller/list" element={<Datatable />} />

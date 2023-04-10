@@ -2,7 +2,6 @@ import "./hsplan.scss";
 import { DataGrid } from "@mui/x-data-grid";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import React, { useState, useEffect } from "react";
-import { Form, Button, Modal } from "react-bootstrap";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import RateReviewIcon from "@mui/icons-material/RateReview";
@@ -25,6 +24,19 @@ import HomeIcon from "@mui/icons-material/Home";
 import GrainIcon from "@mui/icons-material/Grain";
 import { Tooltip, IconButton } from "@material-ui/core";
 import useHandleRefreshToken from "../refreshtoken/Refreshtoken";
+import {
+  Modal,
+  Button,
+  Cascader,
+  DatePicker,
+  Form,
+  Input,
+  InputNumber,
+  Radio,
+  Select,
+  Switch,
+  TreeSelect,
+} from "antd";
 
 const Hsplan = () => {
   const handleClick = () => {
@@ -50,15 +62,113 @@ const Hsplan = () => {
   const [enable_kuota, setEnable_Kuota] = useState(false);
   const [enable_limit_shared, setEnable_Limit_Shared] = useState(false);
   const [enable_uptime, setEnable_Uptime] = useState(false);
+  const [userData, setUserData] = useState({});
   const [isNameEmpty, setIsNameEmpty] = useState(false);
   const handleRefreshToken = useHandleRefreshToken();
   const [loading, setLoading] = useState(true);
+  const [changePassword, setChangePassword] = useState(false);
+  const [id, setId] = useState("");
+  const [componentSize, setComponentSize] = useState("default");
+  const [options, setOptions] = useState([]);
+  const [nameEdit, setNameEdit] = useState("");
+  const [enable_expiredEdit, setEnable_ExpiredEdit] = useState(false);
+  const [enable_kuotaEdit, setEnable_KuotaEdit] = useState(false);
+  const [enable_limit_sharedEdit, setEnable_Limit_SharedEdit] = useState(false);
+  const [enable_uptimeEdit, setEnable_UptimeEdit] = useState(false);
 
   useEffect(() => {
     // Ambil access token dari local storage
     const storedToken = localStorage.getItem("access_token");
     setAccessToken(storedToken);
   }, []);
+
+  // INI UNTUK GET DATA UPDATE
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem("access_token");
+    const refreshToken = localStorage.getItem("refresh_token");
+    axios
+      .get(`http://172.16.26.97:5000/hotspot_plan/plan_type/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: accessToken,
+        },
+      })
+      .then((res) => {
+        // console.log(res.data.name);
+
+        setUserData(res.data.id);
+        setNameEdit(res.data.name);
+        setEnable_ExpiredEdit(res.data.enable_expired);
+        setEnable_KuotaEdit(res.data.enable_kuota);
+        setEnable_Limit_SharedEdit(res.data.enable_limit_shared);
+        setEnable_UptimeEdit(res.data.enable_uptime);
+      })
+      .catch((err) => console.log(err));
+
+    // Set options for enable_expired select
+    const formattedOptions = [
+      { value: true, label: "Enable" },
+      { value: false, label: "Disable" },
+    ];
+    setOptions(formattedOptions);
+  }, [id]);
+
+  const handleStatusChange = (event) => {
+    setEnable_ExpiredEdit(event.target.value === "true"); // konversi nilai string menjadi boolean
+  };
+
+  // INI UNTUK ON CHANGE DI SELECT
+
+  const handleNameChange = (event) => {
+    setNameEdit(event.target.value);
+  };
+
+  const handleExpiredChange = (event) => {
+    setEnable_ExpiredEdit(event.target.value);
+  };
+  const handleKuotaChange = (event) => {
+    setEnable_KuotaEdit(event.target.value);
+  };
+  const handleSharedChange = (event) => {
+    setEnable_Limit_SharedEdit(event.target.value);
+  };
+  const handleUptimeChange = (event) => {
+    setEnable_UptimeEdit(event.target.value);
+  };
+
+  // INI UNTUK PUT UPDATE DATA
+
+  const handleUpdatePlan = () => {
+    const accessToken = localStorage.getItem("access_token");
+    const refreshToken = localStorage.getItem("refresh_token");
+    const updatedUserData = {
+      id,
+      name: nameEdit,
+      enable_expired: enable_expiredEdit,
+      enable_kuota: enable_kuotaEdit,
+      enable_limit_shared: enable_limit_sharedEdit,
+      enable_uptime: enable_uptimeEdit,
+    };
+    axios
+      .put(`http://172.16.26.97:5000/hotspot_plan/plan_type`, updatedUserData, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: accessToken,
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          toast.success("Updated Successfully.");
+          getApi();
+          handleOk();
+          handleCancel();
+        } else {
+          setError("Failed to update, please try again.");
+        }
+      })
+      .catch((err) => console.log(err));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -104,8 +214,12 @@ const Hsplan = () => {
           setError("Failed to register, please try again.");
         }
       } catch (error) {
-        console.error(error);
-        setError("Failed to register, please try again.");
+        if (error.response && error.response.status === 409) {
+          toast.error("Plan already exists!");
+        } else {
+          setError("Failed to register, please try again.");
+          await handleRefreshToken();
+        }
       }
     }
   };
@@ -196,7 +310,9 @@ const Hsplan = () => {
       }
     } catch (err) {
       if (error.response && error.response.status === 401) {
-        // toast.error("You not have access!");
+        toast.error("You do not have access!");
+      } else if ((error.response && error.response.status === 403) || 500) {
+        toast.error("Plan Type Used!");
       } else {
         setError("Failed to register, please try again.");
         await handleRefreshToken();
@@ -217,7 +333,7 @@ const Hsplan = () => {
                 <div className="viewButtonOperator">
                   <RateReviewIcon
                     className="viewIcon"
-                    // onClick={() => handleShowEdit(rowData.id)}
+                    onClick={() => showModalAnt(rowData.id)}
                   />
                 </div>
               </Tooltip>
@@ -268,95 +384,322 @@ const Hsplan = () => {
     });
   };
 
+  // UNTUK MODAL UPDATE
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [form] = Form.useForm();
+
+  const showModalAnt = (id) => {
+    setId(id);
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    console.log("clicked");
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+    form.setFieldsValue({
+      name: "",
+      kuota: "",
+      uptime: "",
+      shared: "",
+      expired: "",
+    });
+  };
+
   return (
     <>
-      <div className="homeService">
-        <Sidebar />
-        <div className="homeContainer" handleClick={handleClick}>
-          <Navbar handleClick={handleClick} />
-          <div className="widgettwo" handleClick={handleClick}>
-            <WidgetTwo />
+      <div className="mainContainer">
+        <Modal
+          title="Edit Hotspot Plan"
+          visible={isModalOpen}
+          onOk={handleUpdatePlan}
+          onCancel={handleCancel}
+        >
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <Form>
+              <Form.Item label="Name" style={{ width: "95%" }}>
+                <Input value={nameEdit} onChange={handleNameChange} />
+              </Form.Item>
+              <div style={{ display: "flex", flexWrap: "wrap" }}>
+                <Form.Item
+                  label="Kuota"
+                  style={{ flexBasis: "45%", marginRight: "20px" }}
+                >
+                  <Select
+                    value={enable_kuotaEdit}
+                    onChange={(value) => setEnable_KuotaEdit(value)}
+                  >
+                    {options.map((option) => (
+                      <Select.Option value={option.value} key={option.value}>
+                        {option.label}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+                <Form.Item
+                  label="Uptime"
+                  style={{ flexBasis: "45%", marginRight: "20px" }}
+                >
+                  <Select
+                    value={enable_uptimeEdit}
+                    onChange={(value) => setEnable_UptimeEdit(value)}
+                  >
+                    {options.map((option) => (
+                      <Select.Option value={option.value} key={option.value}>
+                        {option.label}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+                <Form.Item
+                  label="Shared"
+                  style={{ flexBasis: "45%", marginRight: "20px" }}
+                >
+                  <Select
+                    value={enable_limit_sharedEdit}
+                    onChange={(value) => setEnable_Limit_SharedEdit(value)}
+                  >
+                    {options.map((option) => (
+                      <Select.Option value={option.value} key={option.value}>
+                        {option.label}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+                <Form.Item
+                  label="Expired"
+                  style={{ flexBasis: "45%", marginRight: "20px" }}
+                >
+                  <Select
+                    value={enable_expiredEdit}
+                    onChange={(value) => setEnable_ExpiredEdit(value)}
+                  >
+                    {options.map((option) => (
+                      <Select.Option value={option.value} key={option.value}>
+                        {option.label}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </div>
+            </Form>
           </div>
-          <div className="top">
-            <ToastContainer />
-            <h1>Hotspot Profile</h1>
-          </div>
-          <div className="containerForm">
-            <div className="leftForm">
-              <div className="formSection">
-                <h1>Add New Hotspot Profile</h1>
-                <Form onSubmit={handleSubmit} className="formPlan">
-                  <div className="formInputPlan">
-                    <label>Name</label>
-                    <input
-                      className="inputName"
-                      type="text"
-                      placeholder="Name"
-                      required
-                      value={name}
-                      onChange={(e) => {
-                        setName(e.target.value);
-                        setIsNameEmpty(false);
+        </Modal>
+        {/* <Modal show={showModal} onHide={handleCloseModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>Create new account</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group
+                className="mb-3"
+                controlId="exampleForm.ControlInput1"
+              >
+                <Form.Label>Full Name</Form.Label>
+                <Form.Control
+                  type="username"
+                  placeholder="full name"
+                  autoFocus
+                  // value={username}
+                  // onChange={(e) => setUsername(e.target.value)}
+                  required="required"
+                />
+              </Form.Group>
+              <Form.Group
+                className="mb-3"
+                controlId="exampleForm.ControlInput1"
+              >
+                <Form.Label>Email address</Form.Label>
+                <Form.Control
+                  type="email"
+                  placeholder="name@tachyon.net.id"
+                  // value={email}
+                  // onChange={(e) => setEmail(e.target.value)}
+                  required="required"
+                />
+              </Form.Group>
+
+              <div className="row">
+                <div className="col">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    // value={password}
+                    // onChange={(e) => setPassword(e.target.value)}
+                    required="required"
+                  />{" "}
+                </div>
+                <div className="col">
+                  <Form.Label>Confirm Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    // value={confPassword}
+                    // onChange={(e) => setConfPassword(e.target.value)}
+                    required="required"
+                  />{" "}
+                </div>
+              </div>
+              <div className="row" id="status">
+                <div className="col">
+                  <Form.Label>Status</Form.Label>
+                  <Form.Select
+                    // value={status}
+                    // onChange={(e) => setStatus(e.target.value)}
+                    required="required"
+                  >
+                    <option></option>
+                    <option>Active</option>
+                    <option>Disable</option>
+                  </Form.Select>
+                </div>
+                <div className="col">
+                  <Form.Label>Access</Form.Label>
+                  <Form.Select
+                    // value={administrator}
+                    // onChange={(e) => setAdministrator(e.target.value)}
+                    required="required"
+                    id="administratorId"
+                  >
+                    <option></option>
+                    <option value={true}>Admin</option>
+                    <option value={false}>Users</option>
+                  </Form.Select>
+                </div>
+              </div>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="secondary"
+              className="close-btn"
+              onClick={handleCloseModal}
+            >
+              Close
+            </Button>
+            <Button className="submit-btn" type="submit" onClick={handleSubmit}>
+              Create
+            </Button>
+          </Modal.Footer>
+        </Modal> */}
+        <div className="homeService">
+          <Sidebar />
+          <div className="homeContainer" handleClick={handleClick}>
+            <Navbar handleClick={handleClick} />
+            <div className="widgettwo" handleClick={handleClick}>
+              <WidgetTwo />
+            </div>
+
+            <div className="top">
+              <ToastContainer />
+              <h1>Hotspot Profile</h1>
+            </div>
+            <div className="containerForm">
+              <div className="leftForm">
+                <div className="formSection">
+                  <h1>Add New Hotspot Plan</h1>
+                  <form onSubmit={handleSubmit} className="formPlan">
+                    <div className="formInputPlan">
+                      <label>Name</label>
+                      <input
+                        className="inputName"
+                        type="text"
+                        placeholder="Name"
+                        required
+                        value={name}
+                        onChange={(e) => {
+                          setName(e.target.value);
+                          setIsNameEmpty(false);
+                        }}
+                      />
+                    </div>
+
+                    <div className="formInputPlan">
+                      <label>Kuota</label>
+                      <select
+                        value={enable_kuota}
+                        onChange={(e) => {
+                          setEnable_Kuota(e.target.value);
+                          setIsNameEmpty(false);
+                        }}
+                      >
+                        <option value={true}>Enable</option>
+                        <option value={false}>Disable</option>
+                      </select>
+                    </div>
+                    <div className="formInputPlan">
+                      <label>Limit Shared</label>
+                      <select
+                        value={enable_limit_shared}
+                        onChange={(e) => {
+                          setEnable_Limit_Shared(e.target.value);
+                          setIsNameEmpty(false);
+                        }}
+                      >
+                        {" "}
+                        <option value={true}>Enable</option>
+                        <option value={false}>Disable</option>
+                      </select>
+                    </div>
+                    <div className="formInputPlan">
+                      <label>Uptime</label>
+                      <select
+                        value={enable_uptime}
+                        onChange={(e) => {
+                          setEnable_Uptime(e.target.value);
+                          setIsNameEmpty(false);
+                        }}
+                      >
+                        {" "}
+                        <option value={true}>Enable</option>
+                        <option value={false}>Disable</option>
+                      </select>
+                    </div>
+                    <div className="formInputPlan">
+                      <label>Expired</label>
+                      <select
+                        value={enable_expired}
+                        onChange={(e) => {
+                          setEnable_Expired(e.target.value);
+                          setIsNameEmpty(false);
+                        }}
+                      >
+                        {" "}
+                        <option value={true}>Enable</option>
+                        <option value={false}>Disable</option>
+                      </select>
+                    </div>
+
+                    <button type="submit">Create Plan Type</button>
+                  </form>
+                </div>
+              </div>
+              <div className="rightForm">
+                <div className="listSection">
+                  <h1>List Hotspot Plan</h1>
+                  <div className="tableSection">
+                    <Box
+                      sx={{
+                        width: "100%",
                       }}
                     />
-                  </div>
 
-                  <div className="formInputPlan">
-                    <label>Kuota</label>
-                    <select name="" id="">
-                      <option value="true">Enable</option>
-                      <option value="false">Disable</option>
-                    </select>
+                    <DataGrid
+                      columns={userColumnsNew.concat(actionColumn)}
+                      rows={addIndex(listPlan)}
+                      // rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                      pageSize={10}
+                    />
                   </div>
-                  <div className="formInputPlan">
-                    <label>Limit Shared</label>
-                    <select name="" id="">
-                      <option value="true">Enable</option>
-                      <option value="false">Disable</option>
-                    </select>
-                  </div>
-                  <div className="formInputPlan">
-                    <label>Uptime</label>
-                    <select name="" id="">
-                      <option value="true">Enable</option>
-                      <option value="false">Disable</option>
-                    </select>
-                  </div>
-                  <div className="formInputPlan">
-                    <label>Expired</label>
-                    <select name="" id="">
-                      <option value="true">Enable</option>
-                      <option value="false">Disable</option>
-                    </select>
-                  </div>
-
-                  <button type="submit">Create Plan Type</button>
-                </Form>
-              </div>
-            </div>
-            <div className="rightForm">
-              <div className="listSection">
-                <h1>List Hotspot Profile</h1>
-                <div className="tableSection">
-                  <Box
-                    sx={{
-                      width: "100%",
-                    }}
-                  />
-
-                  <DataGrid
-                    columns={userColumnsNew.concat(actionColumn)}
-                    rows={addIndex(listPlan)}
-                    // rowsPerPageOptions={[5, 10, 25, 50, 100]}
-                    pageSize={10}
-                  />
                 </div>
               </div>
             </div>
+            <div className="mrgBtm"></div>
           </div>
-          <div className="mrgBtm"></div>
         </div>
-      </div>{" "}
+      </div>
     </>
   );
 };
