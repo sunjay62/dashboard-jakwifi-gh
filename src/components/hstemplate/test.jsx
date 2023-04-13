@@ -73,11 +73,10 @@ const Hstemplate = () => {
   const [uptimeEdit, setUptimeEdit] = useState("");
   const [userData, setUserData] = useState({});
   const [id, setId] = useState("");
-
-  const [selectedUptime, setSelectedUptime] = useState("seconds");
-  const [selectedExpired, setSelectedExpired] = useState("seconds");
+  const [uptimeDisplay, setUptimeDisplay] = useState("");
+  const [expiredDisplay, setExpiredDisplay] = useState("");
+  const [selectedUnit, setSelectedUnit] = useState("minutes");
   const [uptimeSeconds, setUptimeSeconds] = useState(0);
-  const [expiredSeconds, setExpiredSeconds] = useState(0);
 
   useEffect(() => {
     // Ambil access token dari local storage
@@ -154,52 +153,16 @@ const Hstemplate = () => {
     const newExpired = event.target.value;
     setExpiredEdit(newExpired);
 
-    let factor = 1;
-    switch (selectedExpired) {
-      case "month":
-        factor = 60 * 60 * 24 * 30;
-        break;
-      case "day":
-        factor = 60 * 60 * 24;
-        break;
-      case "hours":
-        factor = 60 * 60;
-        break;
-      case "minutes":
-        factor = 60;
-        break;
-      default:
-        factor = 1;
-    }
-    const expiredSeconds = newExpired * factor;
-    setExpiredSeconds(expiredSeconds);
+    const expiredSeconds = newExpired % 60;
+    const expiredMinutes = Math.floor(newExpired / 60) % 60;
+    const expiredHours = Math.floor(newExpired / (60 * 60)) % 24;
+    const expiredDays = Math.floor(newExpired / (60 * 60 * 24));
+    setExpiredDisplay(
+      ` / ${expiredDays}d ${("0" + expiredHours).slice(-2)}:${(
+        "0" + expiredMinutes
+      ).slice(-2)}:${("0" + expiredSeconds).slice(-2)}`
+    );
   };
-
-  const handleUnitExpiredChange = (event) => {
-    const selected = event.target.value;
-    setSelectedExpired(selected);
-
-    let factor = 1;
-    switch (selected) {
-      case "month":
-        factor = 60 * 60 * 24 * 30;
-        break;
-      case "day":
-        factor = 60 * 60 * 24;
-        break;
-      case "hours":
-        factor = 60 * 60;
-        break;
-      case "minutes":
-        factor = 60;
-        break;
-      default:
-        factor = 1;
-    }
-    const expiredSeconds = expiredEdit * factor;
-    setExpiredSeconds(expiredSeconds);
-  };
-
   const handleKuotaChange = (event) => {
     setKuotaEdit(event.target.value);
   };
@@ -215,7 +178,7 @@ const Hstemplate = () => {
     setUptimeEdit(newUptime);
 
     let factor = 1;
-    switch (selectedUptime) {
+    switch (selectedUnit) {
       case "month":
         factor = 60 * 60 * 24 * 30;
         break;
@@ -235,9 +198,9 @@ const Hstemplate = () => {
     setUptimeSeconds(uptimeSeconds);
   };
 
-  const handleUnitUptimeChange = (event) => {
+  const handleUnitChange = (event) => {
     const selected = event.target.value;
-    setSelectedUptime(selected);
+    setSelectedUnit(selected);
 
     let factor = 1;
     switch (selected) {
@@ -277,7 +240,6 @@ const Hstemplate = () => {
       type_id: type_IdEdit,
       uptime: uptimeEdit,
       uptime: uptimeSeconds,
-      expired: expiredSeconds,
     };
     axios
       .put(
@@ -295,6 +257,7 @@ const Hstemplate = () => {
           toast.success("Updated Successfully.");
           getApi();
           handleOk();
+          handleCancel();
         } else {
           setError("Failed to update, please try again.");
         }
@@ -559,8 +522,6 @@ const Hstemplate = () => {
   };
   const handleCancel = () => {
     setIsModalOpen(false);
-    setSelectedExpired("seconds");
-    setSelectedUptime("seconds");
   };
 
   // INI UNTUK MENDAPATKAN NAME DARI BACKEND UNTUK SELECT TEMPLATE MENAMPILKAN NAME
@@ -654,16 +615,12 @@ const Hstemplate = () => {
                   onChange={handleUptimeChange}
                 />
                 <div id="uptimeDisplay">
-                  <select
-                    value={selectedUptime}
-                    onChange={handleUnitUptimeChange}
-                  >
+                  <select value={selectedUnit} onChange={handleUnitChange}>
                     <option value="">Select Unit</option>
                     <option value="month">Months</option>
                     <option value="day">Days</option>
                     <option value="hours">Hours</option>
                     <option value="minutes">Minutes</option>
-                    <option value="seconds">Seconds</option>
                   </select>
                 </div>
               </div>
@@ -678,19 +635,7 @@ const Hstemplate = () => {
                   value={expiredEdit}
                   onChange={handleExpiredChange}
                 />
-                <div id="uptimeDisplay">
-                  <select
-                    value={selectedExpired}
-                    onChange={handleUnitExpiredChange}
-                  >
-                    <option value="">Select Unit</option>
-                    <option value="month">Months</option>
-                    <option value="day">Days</option>
-                    <option value="hours">Hours</option>
-                    <option value="minutes">Minutes</option>
-                    <option value="seconds">Seconds</option>
-                  </select>
-                </div>
+                <div id="uptimeDisplay">{expiredDisplay}</div>
               </div>
             </div>
           </form>
@@ -815,85 +760,53 @@ const Hstemplate = () => {
                       </div>
                       <div className="formInputTemplate">
                         <label>Uptime</label>
-                        <div className="inputContainer">
-                          <input
-                            type="number"
-                            id="kuota"
-                            placeholder={
-                              uptime === ""
-                                ? selectedTemplate?.enable_uptime
-                                  ? "Uptime"
-                                  : "0"
-                                : ""
-                            }
-                            required={!selectedTemplate?.enable_uptime}
-                            disabled={!selectedTemplate?.enable_uptime}
-                            value={
-                              uptime === "" && !selectedTemplate?.enable_uptime
-                                ? "0"
-                                : uptime
-                            }
-                            onChange={(e) => {
-                              setUptime(e.target.value);
-                              setIsNameEmpty(false);
-                            }}
-                          />
-                          <div id="uptimeDisplay">
-                            <select
-                              disabled={!selectedTemplate?.enable_uptime}
-                              value={selectedUptime}
-                              onChange={handleUnitUptimeChange}
-                            >
-                              <option value="month">Months</option>
-                              <option value="day">Days</option>
-                              <option value="hours">Hours</option>
-                              <option value="minutes">Minutes</option>
-                              <option value="seconds">Seconds</option>
-                            </select>
-                          </div>
-                        </div>
+                        <input
+                          type="number"
+                          id="kuota"
+                          placeholder={
+                            uptime === ""
+                              ? selectedTemplate?.enable_uptime
+                                ? "Uptime"
+                                : "0"
+                              : ""
+                          }
+                          required={!selectedTemplate?.enable_uptime}
+                          disabled={!selectedTemplate?.enable_uptime}
+                          value={
+                            uptime === "" && !selectedTemplate?.enable_uptime
+                              ? "0"
+                              : uptime
+                          }
+                          onChange={(e) => {
+                            setUptime(e.target.value);
+                            setIsNameEmpty(false);
+                          }}
+                        />
                       </div>
-
                       <div className="formInputTemplate inputExpired">
                         <label>Expired</label>
-                        <div className="inputContainer">
-                          <input
-                            type="number"
-                            id="kuota"
-                            placeholder={
-                              expired === ""
-                                ? selectedTemplate?.enable_expired
-                                  ? "Expired"
-                                  : "0"
-                                : ""
-                            }
-                            required={!selectedTemplate?.enable_expired}
-                            disabled={!selectedTemplate?.enable_expired}
-                            value={
-                              expired === "" &&
-                              !selectedTemplate?.enable_expired
-                                ? "0"
-                                : expired
-                            }
-                            onChange={(e) => {
-                              setExpired(e.target.value);
-                              setIsNameEmpty(false);
-                            }}
-                          />
-                          <div id="uptimeDisplay">
-                            <select
-                              disabled={!selectedTemplate?.enable_expired}
-                              value={selectedUptime}
-                              onChange={handleUnitUptimeChange}
-                            >
-                              <option value="month">Months</option>
-                              <option value="day">Days</option>
-                              <option value="hours">Hours</option>
-                              <option value="minutes">Minutes</option>
-                              <option value="seconds">Seconds</option>
-                            </select>
-                          </div>
-                        </div>
+                        <input
+                          type="number"
+                          id="kuota"
+                          placeholder={
+                            expired === ""
+                              ? selectedTemplate?.enable_expired
+                                ? "Expired"
+                                : "0"
+                              : ""
+                          }
+                          required={!selectedTemplate?.enable_expired}
+                          disabled={!selectedTemplate?.enable_expired}
+                          value={
+                            expired === "" && !selectedTemplate?.enable_expired
+                              ? "0"
+                              : expired
+                          }
+                          onChange={(e) => {
+                            setExpired(e.target.value);
+                            setIsNameEmpty(false);
+                          }}
+                        />
                       </div>
                       <button type="submit" onClick={handleSubmit}>
                         Create Template

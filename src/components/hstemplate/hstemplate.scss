@@ -202,3 +202,79 @@
     }
   }
 }
+
+.inputExpired {
+  margin-left: -10px;
+}
+
+//Styele modal edit template
+
+.formTemplateEdit {
+  display: flex;
+  flex-wrap: wrap;
+  height: 70vh;
+  width: 100%;
+  gap: 20px;
+  justify-content: space-around;
+  background-color: #fff;
+
+  .formInputTemplateEdit:nth-child(1) {
+    width: 93%;
+  }
+  .formInputTemplateEdit:nth-child(2) {
+    width: 93%;
+  }
+
+  .formInputTemplateEdit {
+    width: 40%;
+
+    label {
+      display: flex;
+      align-items: center;
+      gap: 10;
+
+      .icon {
+        cursor: pointer;
+      }
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-bottom: 1px solid gray;
+      outline-color: transparent;
+      transition: outline-color 0.2s ease-in-out;
+    }
+
+    input:focus {
+      outline-color: skyblue;
+    }
+
+    select {
+      width: 100%;
+      padding: 5px;
+      border: none;
+      border-bottom: 1px solid gray;
+      cursor: pointer;
+    }
+  }
+}
+
+.inputContainer {
+  position: relative;
+}
+
+#uptimeDisplay {
+  position: absolute;
+  top: 1%;
+  right: 2%;
+  padding: 0.25rem;
+  font-size: 0.85rem;
+  font-weight: 450;
+  background-color: transparent;
+
+  select {
+    border-bottom: none;
+  }
+}

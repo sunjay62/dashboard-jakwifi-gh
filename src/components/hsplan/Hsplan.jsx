@@ -488,102 +488,7 @@ const Hsplan = () => {
             </Form>
           </div>
         </Modal>
-        {/* <Modal show={showModal} onHide={handleCloseModal}>
-          <Modal.Header closeButton>
-            <Modal.Title>Create new account</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <Form.Group
-                className="mb-3"
-                controlId="exampleForm.ControlInput1"
-              >
-                <Form.Label>Full Name</Form.Label>
-                <Form.Control
-                  type="username"
-                  placeholder="full name"
-                  autoFocus
-                  // value={username}
-                  // onChange={(e) => setUsername(e.target.value)}
-                  required="required"
-                />
-              </Form.Group>
-              <Form.Group
-                className="mb-3"
-                controlId="exampleForm.ControlInput1"
-              >
-                <Form.Label>Email address</Form.Label>
-                <Form.Control
-                  type="email"
-                  placeholder="name@tachyon.net.id"
-                  // value={email}
-                  // onChange={(e) => setEmail(e.target.value)}
-                  required="required"
-                />
-              </Form.Group>
 
-              <div className="row">
-                <div className="col">
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control
-                    type="password"
-                    // value={password}
-                    // onChange={(e) => setPassword(e.target.value)}
-                    required="required"
-                  />{" "}
-                </div>
-                <div className="col">
-                  <Form.Label>Confirm Password</Form.Label>
-                  <Form.Control
-                    type="password"
-                    // value={confPassword}
-                    // onChange={(e) => setConfPassword(e.target.value)}
-                    required="required"
-                  />{" "}
-                </div>
-              </div>
-              <div className="row" id="status">
-                <div className="col">
-                  <Form.Label>Status</Form.Label>
-                  <Form.Select
-                    // value={status}
-                    // onChange={(e) => setStatus(e.target.value)}
-                    required="required"
-                  >
-                    <option></option>
-                    <option>Active</option>
-                    <option>Disable</option>
-                  </Form.Select>
-                </div>
-                <div className="col">
-                  <Form.Label>Access</Form.Label>
-                  <Form.Select
-                    // value={administrator}
-                    // onChange={(e) => setAdministrator(e.target.value)}
-                    required="required"
-                    id="administratorId"
-                  >
-                    <option></option>
-                    <option value={true}>Admin</option>
-                    <option value={false}>Users</option>
-                  </Form.Select>
-                </div>
-              </div>
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="secondary"
-              className="close-btn"
-              onClick={handleCloseModal}
-            >
-              Close
-            </Button>
-            <Button className="submit-btn" type="submit" onClick={handleSubmit}>
-              Create
-            </Button>
-          </Modal.Footer>
-        </Modal> */}
         <div className="homeService">
           <Sidebar />
           <div className="homeContainer" handleClick={handleClick}>
@@ -594,7 +499,7 @@ const Hsplan = () => {
 
             <div className="top">
               <ToastContainer />
-              <h1>Hotspot Profile</h1>
+              <h1>Hotspot Type Plan</h1>
             </div>
             <div className="containerForm">
               <div className="leftForm">
@@ -604,7 +509,7 @@ const Hsplan = () => {
                     <div className="formInputPlan">
                       <label>Name</label>
                       <input
-                        className="inputName"
+                        className="inputNamePlan"
                         type="text"
                         placeholder="Name"
                         required
