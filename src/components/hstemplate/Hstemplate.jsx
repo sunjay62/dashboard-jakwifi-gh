@@ -73,9 +73,14 @@ const Hstemplate = () => {
   const [uptimeEdit, setUptimeEdit] = useState("");
   const [userData, setUserData] = useState({});
   const [id, setId] = useState("");
+  const [tipeId, setTipeId] = useState("");
 
+  const [selectedUptimePost, setSelectedUptimePost] = useState("seconds");
+  const [selectedExpiredPost, setSelectedExpiredPost] = useState("seconds");
   const [selectedUptime, setSelectedUptime] = useState("seconds");
   const [selectedExpired, setSelectedExpired] = useState("seconds");
+  const [uptimeSecondsPost, setUptimeSecondsPost] = useState(0);
+  const [expiredSecondsPost, setExpiredSecondsPost] = useState(0);
   const [uptimeSeconds, setUptimeSeconds] = useState(0);
   const [expiredSeconds, setExpiredSeconds] = useState(0);
 
@@ -262,6 +267,110 @@ const Hstemplate = () => {
 
   // INI AKHIR DARI SCRIPT GET EDIT DATA
 
+  //INI UNTUK HANDLE SCRIPT POST UPTIME DAN EXPIRED
+
+  const handleUptimeChangePost = (event) => {
+    const newUptimePost = event.target.value;
+    setUptime(newUptimePost);
+    setIsNameEmpty(false);
+
+    let factor = 1;
+    switch (selectedUptimePost) {
+      case "month":
+        factor = 60 * 60 * 24 * 30;
+        break;
+      case "day":
+        factor = 60 * 60 * 24;
+        break;
+      case "hours":
+        factor = 60 * 60;
+        break;
+      case "minutes":
+        factor = 60;
+        break;
+      default:
+        factor = 1;
+    }
+    const uptimeSecondsPost = newUptimePost * factor;
+    setUptimeSecondsPost(uptimeSecondsPost);
+  };
+
+  const handleUnitUptimeChangePost = (event) => {
+    const selected = event.target.value;
+    setSelectedUptimePost(selected);
+
+    let factor = 1;
+    switch (selected) {
+      case "month":
+        factor = 60 * 60 * 24 * 30;
+        break;
+      case "day":
+        factor = 60 * 60 * 24;
+        break;
+      case "hours":
+        factor = 60 * 60;
+        break;
+      case "minutes":
+        factor = 60;
+        break;
+      default:
+        factor = 1;
+    }
+    const uptimeSecondsPost = uptime * factor;
+    setUptimeSecondsPost(uptimeSecondsPost);
+  };
+
+  const handleExpiredChangePost = (event) => {
+    const newExpiredPost = event.target.value;
+    setExpired(newExpiredPost);
+    setIsNameEmpty(false);
+
+    let factor = 1;
+    switch (selectedExpiredPost) {
+      case "month":
+        factor = 60 * 60 * 24 * 30;
+        break;
+      case "day":
+        factor = 60 * 60 * 24;
+        break;
+      case "hours":
+        factor = 60 * 60;
+        break;
+      case "minutes":
+        factor = 60;
+        break;
+      default:
+        factor = 1;
+    }
+    const expiredSecondsPost = newExpiredPost * factor;
+    setExpiredSecondsPost(expiredSecondsPost);
+  };
+
+  const handleUnitExpiredChangePost = (event) => {
+    const selected = event.target.value;
+    setSelectedExpiredPost(selected);
+
+    let factor = 1;
+    switch (selected) {
+      case "month":
+        factor = 60 * 60 * 24 * 30;
+        break;
+      case "day":
+        factor = 60 * 60 * 24;
+        break;
+      case "hours":
+        factor = 60 * 60;
+        break;
+      case "minutes":
+        factor = 60;
+        break;
+      default:
+        factor = 1;
+    }
+    const expiredSecondsPost = expired * factor;
+    setExpiredSecondsPost(expiredSecondsPost);
+  };
+
   const handleSubmitUpdate = (event) => {
     event.preventDefault();
 
@@ -328,6 +437,8 @@ const Hstemplate = () => {
           uptime || (uptime !== 0 && selectedTemplate.enable_uptime)
             ? uptime
             : "0",
+        uptime: uptimeSecondsPost,
+        expired: expiredSecondsPost,
       };
       try {
         const token = localStorage.getItem("access_token");
@@ -350,6 +461,9 @@ const Hstemplate = () => {
           setPrice("");
           setLimit_Shared("");
           setUptime("");
+          setTipeId("");
+          setSelectedUptimePost("seconds");
+          setSelectedExpiredPost("seconds");
           getApi();
           toast.success("Registered Successfully.");
         } else if (response.status === 409) {
@@ -546,6 +660,7 @@ const Hstemplate = () => {
     setEnable_Uptime(template.enable_uptime);
     setEnable_Limit_Shared(template.enable_limit_shared);
     setIsNameEmpty(false);
+    setTipeId(e.target.value);
   };
 
   //INI UNTUK MODAL EDIT TEMPLATE
@@ -734,8 +849,10 @@ const Hstemplate = () => {
                           required
                           id="template template-select"
                           onChange={handleTemplateChange}
+                          value={tipeId}
                         >
                           <option
+                            value=""
                             onChange={(e) => {
                               setType_Id(e.target.value);
                               setIsNameEmpty(false);
@@ -779,7 +896,7 @@ const Hstemplate = () => {
                         <label>Limit Shared</label>
                         <input
                           type="number"
-                          id="kuota"
+                          id="shared"
                           placeholder={
                             limit_shared === ""
                               ? selectedTemplate?.enable_limit_shared
@@ -818,7 +935,7 @@ const Hstemplate = () => {
                         <div className="inputContainer">
                           <input
                             type="number"
-                            id="kuota"
+                            id="uptime"
                             placeholder={
                               uptime === ""
                                 ? selectedTemplate?.enable_uptime
@@ -833,16 +950,13 @@ const Hstemplate = () => {
                                 ? "0"
                                 : uptime
                             }
-                            onChange={(e) => {
-                              setUptime(e.target.value);
-                              setIsNameEmpty(false);
-                            }}
+                            onChange={handleUptimeChangePost}
                           />
                           <div id="uptimeDisplay">
                             <select
                               disabled={!selectedTemplate?.enable_uptime}
-                              value={selectedUptime}
-                              onChange={handleUnitUptimeChange}
+                              value={selectedUptimePost}
+                              onChange={handleUnitUptimeChangePost}
                             >
                               <option value="month">Months</option>
                               <option value="day">Days</option>
@@ -875,16 +989,13 @@ const Hstemplate = () => {
                                 ? "0"
                                 : expired
                             }
-                            onChange={(e) => {
-                              setExpired(e.target.value);
-                              setIsNameEmpty(false);
-                            }}
+                            onChange={handleExpiredChangePost}
                           />
                           <div id="uptimeDisplay">
                             <select
                               disabled={!selectedTemplate?.enable_expired}
-                              value={selectedUptime}
-                              onChange={handleUnitUptimeChange}
+                              value={selectedExpiredPost}
+                              onChange={handleUnitExpiredChangePost}
                             >
                               <option value="month">Months</option>
                               <option value="day">Days</option>

@@ -455,7 +455,7 @@ const Hsplan = () => {
                   </Select>
                 </Form.Item>
                 <Form.Item
-                  label="Shared"
+                  label="Share"
                   style={{ flexBasis: "45%", marginRight: "20px" }}
                 >
                   <Select

@@ -1,132 +1,28 @@
 {
-  "hotspot_profile": [
+  "data": [
     {
-      "name": "IBIS HOTEL - SITE NEW",
-      "id": 1
+      "key": "1",
+      "name": "John Brown",
+      "age": 32,
+      "address": "New York No. 1 Lake Park"
     },
     {
-      "name": "IBIS HOTEL - SITE NEW",
-      "id": 2
+      "key": "2",
+      "name": "Joe Black",
+      "age": 42,
+      "address": "London No. 1 Lake Park"
     },
     {
-      "name": "IBIS HOTEL - SITE NEW",
-      "id": 3
+      "key": "3",
+      "name": "Jim Green",
+      "age": 32,
+      "address": "Sydney No. 1 Lake Park"
     },
     {
-      "name": "IBIS HOTEL - SITE NEW",
-      "id": 4
-    },
-    {
-      "name": "IBIS HOTEL - SITE NEW",
-      "id": 5
-    },
-    {
-      "name": "IBIS HOTEL - SITE 9",
-      "id": 6
-    },
-    {
-      "name": "IBIS HOTEL - SITE 9",
-      "id": 7
-    },
-    {
-      "name": "IBIS HOTEL - SITE 9",
-      "id": 8
-    },
-    {
-      "name": "IBIS HOTEL - SITE 9",
-      "id": 9
-    },
-    {
-      "name": "IBIS HOTEL - SITE 9",
-      "id": 10
-    },
-    {
-      "name": "IBIS HOTEL - SITE 9",
-      "id": 11
-    },
-    {
-      "name": "IBIS HOTEL - SITE 9",
-      "id": 12
-    },
-    {
-      "name": "IBIS HOTEL - SITE 9",
-      "id": 13
-    },
-    {
-      "name": "IBIS HOTEL - SITE 9",
-      "id": 14
-    },
-    {
-      "name": "IBIS HOTEL - SITE 9",
-      "id": 15
-    },
-    {
-      "name": "IBIS HOTEL - SITE 9",
-      "id": 16
-    },
-    {
-      "name": "IBIS HOTEL - SITE 9",
-      "id": 17
-    },
-    {
-      "name": "IBIS HOTEL - SITE 9",
-      "id": 18
-    },
-    {
-      "name": "IBIS HOTEL - SITE 9",
-      "id": 19
-    },
-    {
-      "name": "IBIS HOTEL - SITE 9",
-      "id": 20
-    },
-    {
-      "name": "IBIS HOTEL - SITE 5",
-      "id": 21
-    },
-    {
-      "name": "IBIS HOTEL - SITE 2",
-      "id": 22
-    },
-    {
-      "name": "IBIS HOTEL - SITE 2",
-      "id": 23
-    },
-    {
-      "name": "IBIS HOTEL - SITE 91",
-      "id": 24
-    },
-    {
-      "name": "IBIS HOTEL - SITE NEW1",
-      "id": 25
-    },
-    {
-      "name": "IBIS HOTEL - SITE 9",
-      "id": 26
-    },
-    {
-      "name": "IBIS HOTEL - SITE 92",
-      "id": 27
-    },
-    {
-      "name": "",
-      "id": 28
-    },
-    {
-      "name": "",
-      "id": 29
-    },
-    {
-      "name": "",
-      "id": 30
-    },
-    {
-      "name": "",
-      "id": 31
-    },
-    {
-      "name": "",
-      "id": 32
+      "key": "4",
+      "name": "Jim Red",
+      "age": 32,
+      "address": "London No. 2 Lake Park"
     }
   ],
   "markers": [
@@ -134,37 +30,25 @@
       "id": 1,
       "alamat": "Jl. Sudirman No. 1, Jakarta Pusat",
       "client": "PT. ABC",
-      "position": [
-        -6.2853697372824335,
-        106.90094236973619
-      ]
+      "position": [-6.2853697372824335, 106.90094236973619]
     },
     {
       "id": 2,
       "alamat": "Jl. Thamrin No. 2, Jakarta Pusat",
       "client": "PT. XYZ",
-      "position": [
-        -6.2583754627297195,
-        106.97069895147673
-      ]
+      "position": [-6.2583754627297195, 106.97069895147673]
     },
     {
       "id": "TCF-11099",
       "client": "Jakwifi Site Kec Koja Kel Koja RW 005",
       "alamat": "Balai Warga Jalan raya pelabuhan , lorong t RT 09 RW 05",
-      "position": [
-        -6.237884762921482,
-        106.8425559966484
-      ]
+      "position": [-6.237884762921482, 106.8425559966484]
     },
     {
       "id": "TCF-11099",
       "client": "Jakwifi Site Kec Koja Kel Koja RW 005",
       "alamat": "Balai Warga Jalan raya pelabuhan , lorong t RT 09 RW 05",
-      "position": [
-        -6.2985381039621275,
-        106.95687266602577
-      ]
+      "position": [-6.2985381039621275, 106.95687266602577]
     }
   ]
 }
