@@ -266,14 +266,23 @@ const Viewprofile = () => {
     <>
       <div className="mainContainer">
         <Modal
-          title="Basic Modal"
+          title="Add new template"
           open={isModalOpen}
           onOk={handleOk}
           onCancel={handleCancel}
         >
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
+          <form className="formProfileEdit">
+            <h2>Name Profile : </h2>
+            <div className="formInputProfileEdit">
+              <label>Hotspot Template</label>
+              <select name="--list template--" id="">
+                <option value=""></option>
+                <option value="">TEMPLATE 1</option>
+                <option value="">TEMPLATE 2</option>
+                <option value="">TEMPLATE 3</option>
+              </select>
+            </div>
+          </form>
         </Modal>
         <div className="homeService">
           <Sidebar />
