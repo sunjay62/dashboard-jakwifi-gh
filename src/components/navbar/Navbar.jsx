@@ -56,12 +56,9 @@ const Navbar = ({ handleClick }) => {
 
     try {
       const refreshToken = localStorage.getItem("refresh_token");
-
       console.log(refreshToken);
-
       const data = await axios.post(
         "http://172.16.26.97:5000/administrator/logout",
-
         { refresh_token: refreshToken },
         {
           headers: {
@@ -99,8 +96,8 @@ const Navbar = ({ handleClick }) => {
       // Clear logout success message after 2 seconds
       setTimeout(() => {
         setLogoutSuccess(false);
-      }, 2000);
-    }, 3000);
+      }, 1);
+    }, 1);
   };
 
   useEffect(() => {

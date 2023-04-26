@@ -43,6 +43,7 @@ const Viewprofile = () => {
   const [error, setError] = useState("");
   const [isActive, setIsActive] = useState(false);
   const [users, setUsers] = useState([]);
+  const [templates, setTemplates] = useState([]);
 
   useEffect(() => {
     // Ambil access token dari local storage
@@ -199,7 +200,12 @@ const Viewprofile = () => {
     { field: "type_id", headerName: "Plan ID", width: 100 },
     { field: "expired", headerName: "Expired", width: 100 },
     { field: "kuota", headerName: "Kuota", width: 100 },
-    { field: "uptime", headerName: "Uptime /s", width: 100 },
+    {
+      field: "uptime",
+      headerName: "Uptime",
+      width: 100,
+      valueGetter: (params) => convertUptime(params.value),
+    },
     { field: "limit_shared", headerName: "Shared", width: 100 },
   ];
 
@@ -257,9 +263,118 @@ const Viewprofile = () => {
   };
   const handleOk = () => {
     setIsModalOpen(false);
+    handleSubmitTemplate();
   };
   const handleCancel = () => {
     setIsModalOpen(false);
+  };
+
+  // CONVERT DARI DETIK YANG DI TERIMA BACKEND KE MENIT, JAM, DAN HARI
+
+  function convertUptime(uptime) {
+    if (uptime >= 86400) {
+      return Math.floor(uptime / 86400) + " Days";
+    } else if (uptime >= 3600) {
+      return Math.floor(uptime / 3600) + " Hours";
+    } else if (uptime >= 60) {
+      return Math.floor(uptime / 60) + " Minutes";
+    } else {
+      return uptime + " Seconds";
+    }
+  }
+
+  //GET LIST PLAN TEMPLATE
+  useEffect(() => {
+    const fetchData = async () => {
+      const accessToken = localStorage.getItem("access_token");
+      const refreshToken = localStorage.getItem("refresh_token");
+
+      try {
+        const response = await axios.get(
+          "http://172.16.26.97:5000/hotspot_plan/plan_template",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: accessToken,
+            },
+          }
+        );
+
+        setTemplates(response.data.data);
+        console.log(response.data.data);
+        console.log(JSON.stringify(response.data.data));
+      } catch (e) {
+        console.log(e);
+        console.log("access token sudah expired");
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // INI UNTUK AMBIL ID DARI URL
+  const { id: idFromUrl } = useParams(); // Ambil ID dari URL menggunakan useParams()
+  const [idUrl, setIdUrl] = useState(idFromUrl); // Simpan ID ke dalam state
+
+  useEffect(() => {
+    setIdUrl(idFromUrl); // Ketika nilai ID dari URL berubah, ubah nilai state
+  }, [idFromUrl]);
+
+  // INI UNTUK POST DATA TAMBAH TEMPLATE DI DALAM PROFILE
+  const [id_plan_template, setId_plan_template] = useState("");
+  // Definisikan state untuk nilai select yang dipilih
+  const [selectedTemplate, setSelectedTemplate] = useState("");
+
+  // Fungsi untuk menangani perubahan nilai select
+  const handleSelectChange = (e) => {
+    setSelectedTemplate(e.target.value);
+  };
+
+  const handleSubmitTemplate = async (e) => {
+    if (e) e.preventDefault();
+    const postData = {
+      id_hotspot_profile: idUrl,
+      id_plan_template: selectedTemplate,
+    };
+    try {
+      const token = localStorage.getItem("access_token");
+
+      const response = await axios.post(
+        "http://172.16.26.97:5000/hotspot_profile/template",
+        postData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        }
+      );
+
+      console.log(response.status);
+
+      if (response.status === 200) {
+        toast.success("Registered Successfully.");
+        getApi();
+      } else if (response.status === 409) {
+        toast.error("Template already exists.");
+      } else {
+        setError("Failed to register, please try again.");
+      }
+    } catch (error) {
+      console.error(error);
+      if (error.response && error.response.status === 409) {
+        toast.error("Template already exists.");
+      } else {
+        setError("Failed to register, please try again.");
+        console.log(error);
+      }
+      if (error.response && error.response.status === 401) {
+        // toast.error("You not have access!");
+      } else {
+        setError("Failed to register, please try again.");
+        console.log(error);
+      }
+    }
   };
 
   return (
@@ -274,13 +389,29 @@ const Viewprofile = () => {
           <form className="formProfileEdit">
             <h2>Name Profile : </h2>
             <div className="formInputProfileEdit">
+              <label htmlFor="">ID Hostpot Profile</label>
+              <input type="text" disabled value={idUrl} />
+            </div>
+            <div className="formInputProfileEdit">
               <label>Hotspot Template</label>
-              <select name="--list template--" id="">
-                <option value=""></option>
-                <option value="">TEMPLATE 1</option>
-                <option value="">TEMPLATE 2</option>
-                <option value="">TEMPLATE 3</option>
+              <select value={selectedTemplate} onChange={handleSelectChange}>
+                <option value="">Choose an option</option>
+
+                {templates.map((template) => (
+                  <option key={template.id} value={template.id}>
+                    {template.name}
+                  </option>
+                ))}
               </select>
+              {/* <select name="--list template--" id="">
+                <option value=""></option>
+
+                {templates.map((template) => (
+                  <option key={template.id} value={template.id}>
+                    {template.id}
+                  </option>
+                ))}
+              </select> */}
             </div>
           </form>
         </Modal>

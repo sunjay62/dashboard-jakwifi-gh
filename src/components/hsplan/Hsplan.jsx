@@ -324,7 +324,7 @@ const Hsplan = () => {
     {
       field: "action",
       headerName: "Action",
-      width: 175,
+      width: 155,
       renderCell: (rowData) => {
         return (
           <>

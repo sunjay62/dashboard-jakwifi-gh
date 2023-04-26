@@ -324,12 +324,12 @@ const Sidebar = () => {
             <a href="#">
               {/* <i className="bx bxs-bar-chart-alt-2"></i> */}
               <AddchartIcon className="i" />
-              <span className="link-name">Reseller</span>
+              <span className="link-name">Hotspot Server</span>
             </a>
             <ul className="sub-menu blank">
               <li>
                 <a className="link-name" href="#">
-                  Reseller
+                  Hotspot Server
                 </a>
               </li>
             </ul>
