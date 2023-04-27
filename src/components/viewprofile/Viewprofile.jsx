@@ -395,7 +395,9 @@ const Viewprofile = () => {
             <div className="formInputProfileEdit">
               <label>Hotspot Template</label>
               <select value={selectedTemplate} onChange={handleSelectChange}>
-                <option value="">Choose an option</option>
+                <option value="" disabled selected>
+                  --Choose an option--
+                </option>
 
                 {templates.map((template) => (
                   <option key={template.id} value={template.id}>
@@ -446,7 +448,7 @@ const Viewprofile = () => {
                 </Typography>
               </Breadcrumbs>
             </div>
-            <div className="top">
+            <div className="topProfile">
               <ToastContainer />
 
               <h1>Update Profile</h1>

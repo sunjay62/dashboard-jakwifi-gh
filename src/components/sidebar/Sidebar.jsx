@@ -134,6 +134,14 @@ const Sidebar = () => {
     }, 1000);
   };
 
+  const toHsServer = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      navigate("/hotspot/server");
+      setIsLoading(false);
+    }, 1000);
+  };
+
   //   const [sidebarVisibility, setSidebarVisibility] = useState(true);
 
   //   useEffect(() => {
@@ -320,15 +328,17 @@ const Sidebar = () => {
             </ul>
           </li>
 
-          <li>
-            <a href="#">
+          <li onClick={toHsServer}>
+            <a href="#" onClick={toHsServer}>
               {/* <i className="bx bxs-bar-chart-alt-2"></i> */}
-              <AddchartIcon className="i" />
-              <span className="link-name">Hotspot Server</span>
+              <AddchartIcon className="i" onClick={toHsServer} />
+              <span className="link-name" onClick={toHsServer}>
+                Hotspot Server
+              </span>
             </a>
-            <ul className="sub-menu blank">
-              <li>
-                <a className="link-name" href="#">
+            <ul className="sub-menu blank" onClick={toHsServer}>
+              <li onClick={toHsServer}>
+                <a className="link-name" href="#" onClick={toHsServer}>
                   Hotspot Server
                 </a>
               </li>

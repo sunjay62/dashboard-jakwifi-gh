@@ -1,4 +1,4 @@
-import "./hsprofile.scss";
+import "./hsserver.scss";
 import { DataGrid } from "@mui/x-data-grid";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import React, { useState, useEffect } from "react";
@@ -29,8 +29,9 @@ import useHandleRefreshToken from "../refreshtoken/Refreshtoken";
 import Col from "react-bootstrap/Col";
 import InputGroup from "react-bootstrap/InputGroup";
 import Row from "react-bootstrap/Row";
+import withAuth from "../../components/withAuth";
 
-const Hsprofile = () => {
+const Hsserver = () => {
   const handleClick = () => {
     const loadingContainer = document.querySelector(".loadingContainer");
     const loading = document.querySelector(".loading");
@@ -186,7 +187,7 @@ const Hsprofile = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          "http://172.16.26.97:5000/hotspot_plan/plan_template",
+          "http://172.16.26.97:5000/hotspot_profile",
           {
             headers: {
               "Content-Type": "application/json",
@@ -319,14 +320,38 @@ const Hsprofile = () => {
           <div className="widgettwo" handleClick={handleClick}>
             <WidgetTwo />
           </div>
-          <div className="top">
+          <div className="breadCrumbs">
+            <Breadcrumbs
+              aria-label="breadcrumb"
+              // separator={<NavigateNextIcon fontSize="small" />} ini kalo mau rubah garis miring pake panah next
+            >
+              <Link
+                underline="hover"
+                sx={{ display: "flex", alignItems: "center" }}
+                color="inherit"
+                href="/home"
+              >
+                <HomeIcon sx={{ mr: 0.5 }} fontSize="inherit" />
+                Home
+              </Link>
+
+              <Typography
+                sx={{ display: "flex", alignItems: "center" }}
+                color="text.primary"
+              >
+                <GrainIcon sx={{ mr: 0.5 }} fontSize="inherit" />
+                Hotspot Server
+              </Typography>
+            </Breadcrumbs>
+          </div>
+          <div className="topHotspotServer">
             <ToastContainer />
-            <h1>Hotspot Profile</h1>
+            <h1>Hotspot Server</h1>
           </div>
           <div className="containerForm">
             <div className="leftForm">
               <div className="formSection">
-                <h1>Add New Hotspot Profile</h1>
+                <h1>Add New Hotspot Server</h1>
                 <Form onSubmit={handleSubmit} className="formHs">
                   <div className="formInput">
                     {/* <label htmlFor="profile-name">Profile Name :</label> */}
@@ -340,12 +365,12 @@ const Hsprofile = () => {
                     /> */}
 
                     <Form.Group as={Col} md="4" controlId="validationCustom01">
-                      <Form.Label>Profile Name :</Form.Label>
+                      <Form.Label>Hostname Server :</Form.Label>
                       <Form.Control
                         type="text"
                         id="profile-name"
                         name="profile-name"
-                        placeholder="Profile Name"
+                        placeholder="Hostname Server"
                         required
                         value={name}
                         onChange={(e) => {
@@ -357,7 +382,7 @@ const Hsprofile = () => {
                   </div>
 
                   <div className="formInput">
-                    <label htmlFor="template">Template Plan :</label>
+                    <label htmlFor="template">Profile Name :</label>
                     <select
                       id="template"
                       name="template"
@@ -369,7 +394,7 @@ const Hsprofile = () => {
                       }}
                     >
                       <option value="" disabled selected>
-                        --list template--
+                        --list profile--
                       </option>{" "}
                       {templates.map((template) => (
                         <option key={template.id} value={template.id}>
@@ -377,6 +402,17 @@ const Hsprofile = () => {
                         </option>
                       ))}
                     </select>
+                  </div>
+
+                  <div className="formInput">
+                    <Form.Group as={Col} md="4" controlId="validationCustom01">
+                      <Form.Label>Port Server :</Form.Label>
+                      <Form.Control
+                        type="number"
+                        placeholder="Port Server"
+                        required
+                      />
+                    </Form.Group>
                   </div>
 
                   <button type="submit">Create Profile</button>
@@ -410,4 +446,4 @@ const Hsprofile = () => {
   );
 };
 
-export default Hsprofile;
+export default withAuth(Hsserver);
