@@ -2,7 +2,8 @@ import "./hsserver.scss";
 import { DataGrid } from "@mui/x-data-grid";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import React, { useState, useEffect } from "react";
-import { Form, Button, Modal } from "react-bootstrap";
+import { Form } from "react-bootstrap";
+import { CopyTwoTone } from "@ant-design/icons";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import RateReviewIcon from "@mui/icons-material/RateReview";
@@ -30,6 +31,7 @@ import Col from "react-bootstrap/Col";
 import InputGroup from "react-bootstrap/InputGroup";
 import Row from "react-bootstrap/Row";
 import withAuth from "../../components/withAuth";
+import { Modal, Button, message } from "antd";
 
 const Hsserver = () => {
   const handleClick = () => {
@@ -79,7 +81,7 @@ const Hsserver = () => {
         // console.log(token);
 
         const response = await axios.get(
-          "http://172.16.26.97:5000/hotspot_profile",
+          "http://172.16.26.97:5000/hotspot_profile/radius_server",
           {
             headers: {
               "Content-Type": "application/json",
@@ -155,7 +157,7 @@ const Hsserver = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          "http://172.16.26.97:5000/hotspot_profile",
+          "http://172.16.26.97:5000/hotspot_profile/radius_server",
           {
             headers: {
               "Content-Type": "application/json",
@@ -299,8 +301,15 @@ const Hsserver = () => {
       headerName: "No",
       width: 25,
     },
-    { field: "id", headerName: "ID", width: 75 },
-    { field: "name", headerName: "Name", width: 200 },
+    { field: "id", headerName: "ID", width: 50 },
+    { field: "host", headerName: "Host", width: 125 },
+    { field: "port", headerName: "Port", width: 75 },
+    {
+      field: "name",
+      headerName: "Name",
+      width: 175,
+      valueGetter: (params) => params.row.profile_info.name,
+    },
   ];
 
   // INI UNTUK PEMBUATAN NOMOR URUT SECARA OTOMATIS
@@ -309,6 +318,90 @@ const Hsserver = () => {
       item.no = index + 1;
       return item;
     });
+  };
+
+  // INI UNTUK POST DATA TAMBAH TEMPLATE DI DALAM PROFILE
+  // Definisikan state untuk nilai select yang dipilih
+  const [selectedTemplate, setSelectedTemplate] = useState("");
+  const [port, setPort] = useState("");
+  const [host, setHost] = useState("");
+  const [modalData, setModalData] = useState(null);
+  const [visible, setVisible] = useState(false);
+
+  // Fungsi untuk menangani perubahan nilai select
+  const handleSelectChange = (e) => {
+    setSelectedTemplate(e.target.value);
+  };
+
+  const handleSubmitServer = async (e) => {
+    if (e) e.preventDefault();
+    const postData = {
+      host,
+      profile_id: selectedTemplate,
+      port,
+    };
+    try {
+      const token = localStorage.getItem("access_token");
+
+      const response = await axios.post(
+        "http://172.16.26.97:5000/hotspot_profile/radius_server",
+        postData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        }
+      );
+
+      console.log(response.status);
+      console.log(response.data);
+
+      if (response.status === 200) {
+        toast.success("Registered Successfully.");
+        getApi();
+        setPort("");
+        setHost("");
+        setSelectedTemplate("");
+        setModalData(response.data);
+        setVisible(true);
+      } else if (response.status === 409) {
+        toast.error("Template already exists.");
+      } else {
+        setError("Failed to register, please try again.");
+      }
+    } catch (error) {
+      console.error(error);
+      if (error.response && error.response.status === 409) {
+        toast.error("Template already exists.");
+      } else {
+        setError("Failed to register, please try again.");
+        console.log(error);
+      }
+      if (error.response && error.response.status === 401) {
+        // toast.error("You not have access!");
+      } else {
+        setError("Failed to register, please try again.");
+        console.log(error);
+      }
+    }
+  };
+
+  const handleCloseModal = () => {
+    setVisible(false);
+  };
+
+  // INI UNTUK FUNGSI COPY SECRET KEY
+  const handleCopy = () => {
+    // Copy secret key to clipboard
+    const el = document.createElement("textarea");
+    el.value = modalData?.secret_key || "";
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand("copy");
+    document.body.removeChild(el);
+
+    message.success("Secret key copied to clipboard");
   };
 
   return (
@@ -352,7 +445,7 @@ const Hsserver = () => {
             <div className="leftForm">
               <div className="formSection">
                 <h1>Add New Hotspot Server</h1>
-                <Form onSubmit={handleSubmit} className="formHs">
+                <Form onSubmit={handleSubmitServer} className="formHs">
                   <div className="formInput">
                     {/* <label htmlFor="profile-name">Profile Name :</label> */}
                     {/* <input
@@ -372,9 +465,9 @@ const Hsserver = () => {
                         name="profile-name"
                         placeholder="Hostname Server"
                         required
-                        value={name}
+                        value={host}
                         onChange={(e) => {
-                          setName(e.target.value);
+                          setHost(e.target.value);
                           setIsNameEmpty(false);
                         }}
                       />
@@ -387,11 +480,8 @@ const Hsserver = () => {
                       id="template"
                       name="template"
                       required
-                      value={template}
-                      onChange={(e) => {
-                        setTemplate(e.target.value);
-                        setIsNameEmpty(false);
-                      }}
+                      value={selectedTemplate}
+                      onChange={handleSelectChange}
                     >
                       <option value="" disabled selected>
                         --list profile--
@@ -411,17 +501,54 @@ const Hsserver = () => {
                         type="number"
                         placeholder="Port Server"
                         required
+                        value={port}
+                        onChange={(e) => {
+                          setPort(e.target.value);
+                          setIsNameEmpty(false);
+                        }}
                       />
                     </Form.Group>
                   </div>
 
                   <button type="submit">Create Profile</button>
                 </Form>
+                <Modal
+                  title="Registration Success!"
+                  visible={visible}
+                  onOk={handleCloseModal}
+                  onCancel={handleCloseModal}
+                  footer={[
+                    <Button key="ok" type="primary" onClick={handleCloseModal}>
+                      OK
+                    </Button>,
+                  ]}
+                >
+                  <p>Host: {modalData?.host}</p>
+                  <p>Port: {modalData?.port}</p>
+                  <p>ID: {modalData?.id}</p>
+                  <p>Profile ID: {modalData?.profile_id}</p>
+                  <p>Profile Info: {modalData?.profile_info.name}</p>
+                  <p>
+                    Secret Key: {modalData?.secret_key}{" "}
+                    {modalData?.secret_key && (
+                      <Button
+                        className="btnCopy"
+                        size="small"
+                        onClick={handleCopy}
+                        title="Copy"
+                      >
+                        <span>
+                          <CopyTwoTone />
+                        </span>
+                      </Button>
+                    )}
+                  </p>
+                </Modal>
               </div>
             </div>
             <div className="rightForm">
               <div className="listSection">
-                <h1>List Hotspot Profile</h1>
+                <h1>List Hotspot Server</h1>
                 <div className="tableSection">
                   <Box
                     sx={{
