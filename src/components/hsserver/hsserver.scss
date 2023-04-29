@@ -68,9 +68,15 @@
 .btnCopy > svg {
   width: 20px;
   height: 20px;
-  margin-left: 15px;
-  margin-top: -15px;
-  position: absolute;
 }
 
+.button-col {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+}
+
+.success-modal .ant-modal-title {
+  color: rgb(80, 197, 80);
+}
 // ini end css table di dalam modal ketika berhasil regist

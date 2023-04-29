@@ -523,6 +523,7 @@ const Hsserver = () => {
                       OK
                     </Button>,
                   ]}
+                  className="success-modal"
                 >
                   <table className="my-table">
                     <tr>
