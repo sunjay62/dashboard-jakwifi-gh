@@ -32,6 +32,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Row from "react-bootstrap/Row";
 import withAuth from "../../components/withAuth";
 import { Modal, Button, message } from "antd";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 const Hsserver = () => {
   const handleClick = () => {
@@ -523,26 +524,57 @@ const Hsserver = () => {
                     </Button>,
                   ]}
                 >
-                  <p>Host: {modalData?.host}</p>
-                  <p>Port: {modalData?.port}</p>
-                  <p>ID: {modalData?.id}</p>
-                  <p>Profile ID: {modalData?.profile_id}</p>
-                  <p>Profile Info: {modalData?.profile_info.name}</p>
-                  <p>
-                    Secret Key: {modalData?.secret_key}{" "}
-                    {modalData?.secret_key && (
-                      <Button
-                        className="btnCopy"
-                        size="small"
-                        onClick={handleCopy}
-                        title="Copy"
-                      >
-                        <span>
-                          <CopyTwoTone />
-                        </span>
-                      </Button>
-                    )}
-                  </p>
+                  <table className="my-table">
+                    <tr>
+                      <th>
+                        <span>Hostname</span>
+                      </th>
+                      <td>{modalData?.host}</td>
+                    </tr>
+                    <tr>
+                      <th>
+                        <span>Port</span>
+                      </th>
+                      <td>{modalData?.port}</td>
+                    </tr>
+                    <tr>
+                      <th>
+                        <span>ID</span>
+                      </th>
+                      <td>{modalData?.id}</td>
+                    </tr>
+                    <tr>
+                      <th>
+                        <span>Profile ID</span>
+                      </th>
+                      <td>{modalData?.profile_id}</td>
+                    </tr>
+                    <tr>
+                      <th>
+                        <span>Profile Info</span>
+                      </th>
+                      <td>{modalData?.profile_info.name}</td>
+                    </tr>
+                    <tr>
+                      <th>
+                        <span>Secret Key</span>
+                      </th>
+                      <td className="button-col">
+                        {modalData?.secret_key}
+                        {modalData?.secret_key && (
+                          <button
+                            className="btnCopy"
+                            size="small"
+                            onClick={handleCopy}
+                          >
+                            <Tooltip className="copytitle" title="Copy" arrow>
+                              <ContentCopyIcon />
+                            </Tooltip>
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  </table>
                 </Modal>
               </div>
             </div>

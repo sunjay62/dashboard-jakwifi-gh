@@ -20,3 +20,57 @@
 .ant-btn {
   margin-left: 105px;
 }
+
+// ini start css table di dalam modal ketika berhasil regist
+
+.my-table {
+  margin-left: 10px;
+  font-size: 16px;
+  width: 95%;
+  border-collapse: separate;
+  border-spacing: 5px;
+}
+
+.my-table th,
+.my-table td {
+  border: 1px solid rgb(114, 114, 114);
+  padding: 10px;
+  border: none;
+  border-bottom: 1px solid rgb(59, 144, 255);
+}
+
+.my-table th {
+  background-color: #f1efef;
+}
+
+.my-table td {
+  font-weight: bold;
+}
+
+.my-table .btnCopy:hover {
+  color: #1890ff;
+  transition: 0.3s;
+}
+
+.my-table tr td {
+  font-size: 13px;
+}
+.my-table tr th {
+  font-size: 15px;
+}
+
+.btnCopy {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.btnCopy > svg {
+  width: 20px;
+  height: 20px;
+  margin-left: 15px;
+  margin-top: -15px;
+  position: absolute;
+}
+
+// ini end css table di dalam modal ketika berhasil regist
