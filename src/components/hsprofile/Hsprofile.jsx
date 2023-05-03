@@ -329,16 +329,6 @@ const Hsprofile = () => {
                 <h1>Add New Hotspot Profile</h1>
                 <Form onSubmit={handleSubmit} className="formHs">
                   <div className="formInput">
-                    {/* <label htmlFor="profile-name">Profile Name :</label> */}
-                    {/* <input
-                      type="text"
-                      id="profile-name"
-                      name="profile-name"
-                      required
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                    /> */}
-
                     <Form.Group as={Col} md="4" controlId="validationCustom01">
                       <Form.Label>Profile Name :</Form.Label>
                       <Form.Control
