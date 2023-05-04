@@ -2,7 +2,9 @@ import "./hsserver.scss";
 import { DataGrid } from "@mui/x-data-grid";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import React, { useState, useEffect } from "react";
-import { Form } from "react-bootstrap";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { TextField, Grid, Select, MenuItem } from "@material-ui/core";
 import { CopyTwoTone } from "@ant-design/icons";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
@@ -31,8 +33,9 @@ import Col from "react-bootstrap/Col";
 import InputGroup from "react-bootstrap/InputGroup";
 import Row from "react-bootstrap/Row";
 import withAuth from "../../components/withAuth";
-import { Modal, Button, message } from "antd";
+import { Modal, message, Button } from "antd";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { TextFormatRounded } from "@mui/icons-material";
 
 const Hsserver = () => {
   const handleClick = () => {
@@ -97,58 +100,6 @@ const Hsserver = () => {
     };
     fetchAllUsers();
   }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (name === "" && template === "") {
-      setIsNameEmpty(true);
-    } else {
-      // Lakukan sesuatu jika form valid
-
-      e.preventDefault();
-      const postData = { name };
-      try {
-        const token = localStorage.getItem("access_token");
-
-        const response = await axios.post(
-          "http://172.16.26.97:5000/hotspot_profile",
-          postData,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: token,
-            },
-          }
-        );
-
-        console.log(response.status);
-
-        if (response.status === 200) {
-          setName("");
-          getApi();
-          toast.success("Registered Successfully.");
-        } else if (response.status === 409) {
-          toast.error("User already exists.");
-        } else {
-          setError("Failed to register, please try again.");
-        }
-      } catch (error) {
-        console.error(error);
-        if (error.response && error.response.status === 409) {
-          toast.error("User already exists.");
-        } else {
-          setError("Failed to register, please try again.");
-          await handleRefreshToken();
-        }
-        if (error.response && error.response.status === 401) {
-          // toast.error("You not have access!");
-        } else {
-          setError("Failed to register, please try again.");
-          await handleRefreshToken();
-        }
-      }
-    }
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -328,18 +279,18 @@ const Hsserver = () => {
   const [host, setHost] = useState("");
   const [modalData, setModalData] = useState(null);
   const [visible, setVisible] = useState(false);
-
   // Fungsi untuk menangani perubahan nilai select
   const handleSelectChange = (e) => {
     setSelectedTemplate(e.target.value);
   };
 
-  const handleSubmitServer = async (e) => {
+  const handleSubmitServer = async (e, values) => {
     if (e) e.preventDefault();
+
     const postData = {
-      host,
+      host: values.ipAddressOrUrl,
       profile_id: selectedTemplate,
-      port,
+      port: values.port,
     };
     try {
       const token = localStorage.getItem("access_token");
@@ -491,6 +442,28 @@ const Hsserver = () => {
       .catch((err) => console.log(err));
   };
 
+  // INI UNTUK VALIDASI
+
+  const IP_ADDRESS_REGEX = /^(https?:\/\/)?(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/;
+  const URL_REGEX =
+    /^(https?:\/\/)?([\da-z.-]+)\.(com|id|co.id|net.id|co)([/\w .-]*)*\/?$/i;
+
+  const validationSchema = Yup.object().shape({
+    port: Yup.number().required("Port Server is required"),
+    ipAddressOrUrl: Yup.string()
+      .required("IP Address or URL is required")
+      .matches(
+        new RegExp(`(${IP_ADDRESS_REGEX.source})|(${URL_REGEX.source})`),
+        "Invalid IP Address or URL"
+      ),
+  });
+
+  const initialValues = {
+    profile_id: "",
+    port: "",
+    ipAddressOrUrl: "",
+  };
+
   return (
     <>
       <div className="mainContainer">
@@ -558,81 +531,102 @@ const Hsserver = () => {
               <div className="leftForm">
                 <div className="formSection">
                   <h1>Add New Hotspot Server</h1>
-                  <Form onSubmit={handleSubmitServer} className="formHs">
-                    <div className="formInput">
-                      {/* <label htmlFor="profile-name">Profile Name :</label> */}
-                      {/* <input
-                      type="text"
-                      id="profile-name"
-                      name="profile-name"
-                      required
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                    /> */}
-
-                      <Form.Group
-                        as={Col}
-                        md="4"
-                        controlId="validationCustom01"
-                      >
-                        <Form.Label>Hostname Server :</Form.Label>
-                        <Form.Control
-                          type="text"
-                          id="profile-name"
-                          name="profile-name"
-                          placeholder="Hostname Server"
-                          required
-                          value={host}
-                          onChange={(e) => {
-                            setHost(e.target.value);
-                            setIsNameEmpty(false);
+                  <Formik
+                    initialValues={initialValues}
+                    validationSchema={validationSchema}
+                    onSubmit={(values, e) => handleSubmitServer(e, values)}
+                  >
+                    {({
+                      errors,
+                      touched,
+                      values,
+                      handleChange,
+                      handleBlur,
+                    }) => (
+                      <Form className="formHsServer">
+                        <div className="formInputServer">
+                          <Grid item xs={12} className="inputGrid">
+                            <TextField
+                              fullWidth
+                              id="ipAddressOrUrl"
+                              name="ipAddressOrUrl"
+                              label="IP Address or URL"
+                              value={values.ipAddressOrUrl}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              error={
+                                touched.ipAddressOrUrl &&
+                                Boolean(errors.ipAddressOrUrl)
+                              }
+                              helperText={
+                                touched.ipAddressOrUrl && errors.ipAddressOrUrl
+                              }
+                              InputProps={{
+                                classes: {
+                                  root: "input-root",
+                                  focused: "input-focused",
+                                },
+                                inputProps: {
+                                  pattern: `(${IP_ADDRESS_REGEX.source})|(${URL_REGEX.source})`,
+                                },
+                              }}
+                              InputLabelProps={{
+                                classes: {
+                                  root: "input-label-blue",
+                                  focused: "input-label-blue",
+                                },
+                              }}
+                            />
+                          </Grid>
+                        </div>
+                        <div className="formInputServer">
+                          <label htmlFor="template">Profile Name :</label>
+                          <select
+                            id="template"
+                            name="template"
+                            required
+                            value={selectedTemplate}
+                            onChange={handleSelectChange}
+                          >
+                            <option value="" disabled selected>
+                              --list profile--
+                            </option>
+                            {templates.map((template) => (
+                              <option key={template.id} value={template.id}>
+                                {template.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="formInputServer">
+                          <Grid item xs={12} className="inputGrid">
+                            <TextField
+                              fullWidth
+                              type="number"
+                              placeholder="Port Server"
+                              label="Port Server"
+                              required
+                              id="port"
+                              name="port"
+                              value={values.port}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              error={touched.port && Boolean(errors.port)}
+                              helperText={touched.port && errors.port}
+                            />
+                          </Grid>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            handleSubmitServer(e, values);
                           }}
-                        />
-                      </Form.Group>
-                    </div>
-
-                    <div className="formInput">
-                      <label htmlFor="template">Profile Name :</label>
-                      <select
-                        id="template"
-                        name="template"
-                        required
-                        value={selectedTemplate}
-                        onChange={handleSelectChange}
-                      >
-                        <option value="" disabled selected>
-                          --list profile--
-                        </option>{" "}
-                        {templates.map((template) => (
-                          <option key={template.id} value={template.id}>
-                            {template.name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div className="formInput">
-                      <Form.Group
-                        as={Col}
-                        md="4"
-                        controlId="validationCustom01"
-                      >
-                        <Form.Label>Port Server :</Form.Label>
-                        <Form.Control
-                          type="number"
-                          placeholder="Port Server"
-                          required
-                          value={port}
-                          onChange={(e) => {
-                            setPort(e.target.value);
-                            setIsNameEmpty(false);
-                          }}
-                        />
-                      </Form.Group>
-                    </div>
-
-                    <button type="submit">Create Profile</button>
-                  </Form>
+                        >
+                          Create Profile
+                        </button>{" "}
+                      </Form>
+                    )}
+                  </Formik>
                   <Modal
                     title="Registration Success!"
                     visible={visible}

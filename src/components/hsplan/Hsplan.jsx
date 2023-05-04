@@ -372,8 +372,63 @@ const Hsplan = () => {
       headerName: "No",
       width: 50,
     },
-    { field: "id", headerName: "ID", width: 100 },
-    { field: "name", headerName: "Name", width: 150 },
+    {
+      field: "id",
+      headerName: "ID",
+      width: 100,
+    },
+    {
+      field: "name",
+      headerName: "Name",
+      width: 150,
+      renderCell: (params) => {
+        const {
+          name,
+          id,
+          enable_kuota,
+          enable_uptime,
+          enable_limit_shared,
+          enable_expired,
+        } = params.row;
+        return (
+          <Tooltip
+            title={
+              <table>
+                <tbody>
+                  <tr>
+                    <td>ID :</td>
+                    <td>{id}</td>
+                  </tr>
+                  <tr>
+                    <td>Name :</td>
+                    <td>{name}</td>
+                  </tr>
+                  <tr>
+                    <td>Expired :</td>
+                    <td>{enable_expired}</td>
+                  </tr>
+                  <tr>
+                    <td>Kuota :</td>
+                    <td>{enable_kuota}</td>
+                  </tr>
+                  <tr>
+                    <td>Uptime :</td>
+                    <td>{enable_uptime}</td>
+                  </tr>
+                  <tr>
+                    <td>Shared :</td>
+                    <td>{enable_limit_shared}</td>
+                  </tr>
+                </tbody>
+              </table>
+            }
+            arrow
+          >
+            <div>{name}</div>
+          </Tooltip>
+        );
+      },
+    },
   ];
 
   // INI UNTUK PEMBUATAN NOMOR URUT SECARA OTOMATIS

@@ -80,3 +80,185 @@
   color: rgb(80, 197, 80);
 }
 // ini end css table di dalam modal ketika berhasil regist
+
+.error {
+  outline: 2px solid red;
+  transition: outline-color 0.2s ease-in-out;
+  border-radius: 5px;
+}
+
+.error:focus {
+  outline-color: #e74c3c;
+  border-radius: 5px;
+}
+
+// INI CSS UNTUK FORM
+
+.containerForm {
+  height: 95vh;
+  margin: 20px;
+  padding: 10px;
+  display: flex;
+  gap: 15px;
+  border-radius: 7px;
+
+  .leftForm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+    width: 100%;
+
+    h1 {
+      background-color: #fff;
+      border-radius: 7px;
+      -webkit-box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
+      box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
+      font-size: 1.5rem;
+      width: 85%;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 15px;
+      padding: 5px 10px;
+    }
+
+    .formSection {
+      height: 90%;
+      width: 100%;
+    }
+  }
+
+  .rightForm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+    width: 100%;
+    padding-right: 30px;
+
+    h1 {
+      background-color: #fff;
+      border-radius: 7px;
+      -webkit-box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
+      box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
+      font-size: 1.5rem;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 15px;
+      padding: 5px 10px;
+    }
+
+    .listSection {
+      height: 80vh;
+      width: 100%;
+
+      .tableSection {
+        height: 85%;
+        border-radius: 10px;
+        -webkit-box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
+        box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
+      }
+    }
+  }
+}
+
+.MuiDataGrid-main {
+  height: 65vh;
+}
+
+.formHsServer {
+  margin: 0 auto;
+  background-color: #fff;
+  height: 85%;
+  width: 85%;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  -webkit-box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
+  box-shadow: 2px 4px 12px 2px rgba(0, 0, 0, 0.27);
+
+  .formInputServer {
+    width: 75%;
+    margin-bottom: -15%;
+
+    label {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+
+      .icon {
+        cursor: pointer;
+      }
+    }
+
+    TextField {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-bottom: 1px solid gray;
+    }
+
+    select {
+      width: 100%;
+      padding: 5px;
+      border: none;
+      border-bottom: 1px solid gray;
+    }
+  }
+
+  button {
+    width: 150px;
+    height: 35px;
+    border: none;
+    font-weight: bold;
+    background-color: rgb(84, 163, 82);
+    cursor: pointer;
+    color: white;
+    border-radius: 5px;
+    -webkit-box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.27);
+    box-shadow: 1px 4px 12px 4px rgba(0, 0, 0, 0.27);
+
+    &:hover {
+      background-color: rgb(51, 151, 47);
+      transition: 0.5s;
+    }
+  }
+}
+
+.cellAction {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  .viewButtonOperator {
+    padding: 5px 5px;
+    border-radius: 5px;
+    color: rgb(18, 18, 165);
+    cursor: pointer;
+
+    .viewIcon {
+      margin-bottom: -6px;
+      margin-top: 1px;
+    }
+
+    &:hover {
+      background-color: rgba(0, 0, 139, 0.17);
+      transition: 0.2s;
+    }
+  }
+
+  .deleteButtonOperator {
+    padding: 5px 5px;
+    border-radius: 5px;
+    color: rgb(255, 50, 50);
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba(255, 50, 50, 0.17);
+      transition: 0.2s;
+    }
+  }
+}
