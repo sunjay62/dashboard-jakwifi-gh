@@ -17,7 +17,6 @@ import { Popconfirm } from "antd";
 import Sidebar from "../sidebar/Sidebar";
 import Navbar from "../navbar/Navbar";
 import WidgetTwo from "../../components/widgettwo/WidgetTwo";
-import Typography from "@mui/material/Typography";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Link from "@mui/material/Link";
 import HomeIcon from "@mui/icons-material/Home";
@@ -37,6 +36,11 @@ import {
   Switch,
   TreeSelect,
 } from "antd";
+import { styled } from "@mui/material/styles";
+import { tooltipClasses } from "@mui/material/Tooltip";
+import { Tooltip as MuiTooltip } from "@material-ui/core";
+import Typography from "@mui/material/Typography";
+import { makeStyles } from "@material-ui/core/styles";
 
 const Hsplan = () => {
   const handleClick = () => {
@@ -365,6 +369,8 @@ const Hsplan = () => {
     },
   ];
 
+  // ini untuk memunculkan data ke dalam tooltip ketika hover username
+
   // INI UNTUK TABEL
   const userColumnsNew = [
     {
@@ -381,53 +387,6 @@ const Hsplan = () => {
       field: "name",
       headerName: "Name",
       width: 150,
-      renderCell: (params) => {
-        const {
-          name,
-          id,
-          enable_kuota,
-          enable_uptime,
-          enable_limit_shared,
-          enable_expired,
-        } = params.row;
-        return (
-          <Tooltip
-            title={
-              <table>
-                <tbody>
-                  <tr>
-                    <td>ID :</td>
-                    <td>{id}</td>
-                  </tr>
-                  <tr>
-                    <td>Name :</td>
-                    <td>{name}</td>
-                  </tr>
-                  <tr>
-                    <td>Expired :</td>
-                    <td>{enable_expired}</td>
-                  </tr>
-                  <tr>
-                    <td>Kuota :</td>
-                    <td>{enable_kuota}</td>
-                  </tr>
-                  <tr>
-                    <td>Uptime :</td>
-                    <td>{enable_uptime}</td>
-                  </tr>
-                  <tr>
-                    <td>Shared :</td>
-                    <td>{enable_limit_shared}</td>
-                  </tr>
-                </tbody>
-              </table>
-            }
-            arrow
-          >
-            <div>{name}</div>
-          </Tooltip>
-        );
-      },
     },
   ];
 
