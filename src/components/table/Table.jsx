@@ -5,7 +5,7 @@ import { tableRows, tableColumns } from "./tablesource";
 
 const listTable = () => {
   return (
-    <div className="table">
+    <div className="table-list">
       <DataGrid
         rows={tableRows}
         columns={tableColumns}

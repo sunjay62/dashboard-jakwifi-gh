@@ -22,7 +22,7 @@ const data = [
 const Chart = () => {
   return (
     <div className="chart">
-      <div className="title">Last 6 Months (Play Video)</div>
+      <div className="title">Last 6 Months ( New Site )</div>
       <ResponsiveContainer width="100%" aspect={2 / 1}>
         <AreaChart
           width={730}

@@ -35,6 +35,7 @@ import Row from "react-bootstrap/Row";
 import withAuth from "../../components/withAuth";
 import { Modal, message, Button } from "antd";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import CachedIcon from "@mui/icons-material/Cached";
 import { TextFormatRounded } from "@mui/icons-material";
 
 const Hsserver = () => {
@@ -364,9 +365,11 @@ const Hsserver = () => {
   };
   const handleOk = () => {
     setIsModalOpen(false);
+    setSecretKey("");
   };
   const handleCancel = () => {
     setIsModalOpen(false);
+    setSecretKey("");
   };
 
   // INI UNTUK GET DATA DAN UPDATE DATA
@@ -464,6 +467,41 @@ const Hsserver = () => {
     ipAddressOrUrl: "",
   };
 
+  // INI UNTUK GET GENERETE SECRET KEY
+
+  const [secretKey, setSecretKey] = useState("");
+
+  const handleGenerateClick = () => {
+    const token = localStorage.getItem("access_token");
+    axios
+      .get(
+        `http://172.16.26.97:5000/hotspot_profile/radius_server/${id}/generate_secret`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        }
+      )
+      .then((response) => {
+        const { id, secret_key } = response.data;
+        console.log(`ID: ${id}, Secret Key: ${secret_key}`);
+        setSecretKey(secret_key);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleInputChange = (e) => {
+    setSecretKey(e.target.value);
+  };
+
+  const handleCopyGenerate = () => {
+    navigator.clipboard.writeText(secretKey);
+    message.success("Secret key copied to clipboard");
+  };
+
   return (
     <>
       <div className="mainContainer">
@@ -473,22 +511,49 @@ const Hsserver = () => {
           onOk={handleSubmitUpdate}
           onCancel={handleCancel}
         >
-          <form className="formProfileEdit">
-            <div className="formInputProfileEdit">
+          <form className="formServerEdit" onSubmit={(e) => e.preventDefault()}>
+            <div className="formInputServerEdit">
               <label htmlFor="">ID</label>
               <input type="text" disabled value={serverId} />
             </div>
-            <div className="formInputProfileEdit">
+            <div className="formInputServerEdit">
               <label htmlFor="">Hostname</label>
               <input type="text" value={hostName} onChange={handleHostName} />
             </div>
-            <div className="formInputProfileEdit">
+            <div className="formInputServerEdit">
               <label htmlFor="">Port</label>
               <input
                 type="number"
                 value={portServer}
                 onChange={handlePortServer}
               />
+            </div>
+            <div className="formInputServerEdit">
+              <label htmlFor="">Generate Secret</label>
+              <input
+                type="text"
+                value={secretKey}
+                onChange={handleInputChange}
+              />
+              <button
+                className="btnCopy"
+                size="small"
+                onClick={handleCopyGenerate}
+              >
+                <Tooltip className="copytitle" title="Copy" arrow>
+                  <ContentCopyIcon />
+                </Tooltip>
+              </button>
+              <button
+                className="btnCopy"
+                size="small"
+                type="submit"
+                onClick={handleGenerateClick}
+              >
+                <Tooltip className="copytitle" title="Generate" arrow>
+                  <CachedIcon />
+                </Tooltip>
+              </button>
             </div>
           </form>
         </Modal>

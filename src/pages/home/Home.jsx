@@ -73,9 +73,10 @@ const Home = () => {
             <Chart />
           </div>
           <div className="listContainer">
-            <div className="listTitle">Latest Upload Video</div>
+            <div className="listTitle">Latest Create Site</div>
             <Table />
           </div>
+          <br />
         </div>
       </div>
     </div>

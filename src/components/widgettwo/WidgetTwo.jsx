@@ -11,15 +11,15 @@ const WidgetTwo = () => {
     <div className="containerWidget">
       <div className="clients">
         <ManageAccountsOutlinedIcon className="icon" />
-        Clients
+        Resellers
       </div>
       <div className="order">
         <ShoppingCartOutlinedIcon className="icon" />
-        Order
+        Produts
       </div>
       <div className="tickets">
         <LabelOutlinedIcon className="icon" />
-        Tickets
+        Sites
       </div>
       <div className="invoices">
         <PaymentsOutlinedIcon className="icon" />

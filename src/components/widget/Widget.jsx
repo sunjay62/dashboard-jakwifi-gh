@@ -5,6 +5,8 @@ import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
 import ViewListIcon from "@mui/icons-material/ViewList";
 import PausePresentationIcon from "@mui/icons-material/PausePresentation";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import DnsIcon from "@mui/icons-material/Dns";
+import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 
 const Widget = ({ type }) => {
   //temporary
@@ -17,11 +19,11 @@ const Widget = ({ type }) => {
   switch (type) {
     case "upload":
       data = {
-        title: "UPLOAD VIDEOS",
+        title: "HOTSPOT PROFILE",
         value: false,
-        link: "New Upload",
+        link: "New Profile",
         icon: (
-          <DriveFolderUploadIcon
+          <ManageAccountsIcon
             className="icon"
             style={{
               color: "green",
@@ -33,9 +35,9 @@ const Widget = ({ type }) => {
       break;
     case "list":
       data = {
-        title: "LIST VIDEOS",
+        title: "TYPE PLAN",
         value: false,
-        link: "View All List",
+        link: "View All Plan",
         icon: (
           <ViewListIcon
             className="icon"
@@ -49,11 +51,11 @@ const Widget = ({ type }) => {
       break;
     case "status":
       data = {
-        title: "STATUS VIDEOS",
+        title: "HOTSPOT TEMPLATE",
         value: true,
-        link: "View All Status",
+        link: "View All Template",
         icon: (
-          <PausePresentationIcon
+          <ContentPasteIcon
             className="icon"
             style={{
               color: "blue",
@@ -65,11 +67,11 @@ const Widget = ({ type }) => {
       break;
     case "user":
       data = {
-        title: "USERS",
+        title: "HOTSPOT SERVER",
         value: true,
-        link: "See All Users",
+        link: "See All Server",
         icon: (
-          <ManageAccountsIcon
+          <DnsIcon
             className="icon"
             style={{
               color: "red",
