@@ -40,28 +40,6 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState("");
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const accessToken = localStorage.getItem("access_token");
-  //     const refreshToken = localStorage.getItem("refresh_token");
-
-  //     try {
-  //       const res = await axios.get("http://172.16.26.97:8088/operator/@me", {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `${accessToken} ${refreshToken}`,
-  //         },
-  //       });
-
-  //       setUsers(res.data.username);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
-
   const toClient = () => {
     setIsLoading(true);
     setTimeout(() => {
@@ -328,46 +306,18 @@ const Sidebar = () => {
             </ul>
           </li>
 
-          <li onClick={toHsServer}>
-            <a href="#" onClick={toHsServer}>
+          <li onClick={toSite}>
+            <a href="#" onClick={toSite}>
               {/* <i className="bx bxs-bar-chart-alt-2"></i> */}
-              <AddchartIcon className="i" onClick={toHsServer} />
-              <span className="link-name" onClick={toHsServer}>
-                Hotspot Server
+              <AddchartIcon className="i" onClick={toSite} />
+              <span className="link-name" onClick={toSite}>
+                Sites{" "}
               </span>
             </a>
-            <ul className="sub-menu blank" onClick={toHsServer}>
-              <li onClick={toHsServer}>
-                <a className="link-name" href="#" onClick={toHsServer}>
-                  Hotspot Server
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li className="test4" onClick={handleClickArrow4}>
-            <div className="icon-link">
-              <a href="#">
-                {/* <i className="bx bxs-user-detail"></i> */}
-                <DonutSmallIcon className="i" />
-                <span className="link-name">Site</span>
-              </a>
-              {/* <i className="bx bx-chevron-down arrow"></i> */}
-              <KeyboardArrowDownIcon className="arrow " />
-            </div>
-            <ul className="sub-menu">
-              <li>
-                <a className="link-name" href="#">
-                  Site
-                </a>
-              </li>
+            <ul className="sub-menu blank" onClick={toSite}>
               <li onClick={toSite}>
-                <a href="#" onClick={toSite}>
-                  Add Site
-                </a>
-              </li>
-              <li onClick={toSite}>
-                <a href="#" onClick={toSite}>
-                  List Site
+                <a className="link-name" href="#" onClick={toSite}>
+                  Sites
                 </a>
               </li>
             </ul>
@@ -386,6 +336,11 @@ const Sidebar = () => {
               <li>
                 <a className="link-name" href="#">
                   Hotspot
+                </a>
+              </li>
+              <li onClick={toHsServer}>
+                <a href="#" onClick={toHsServer}>
+                  Server
                 </a>
               </li>
               <li onClick={toHsprofile}>

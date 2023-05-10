@@ -19,6 +19,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { Tooltip } from "@material-ui/core";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { Modal } from "antd";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 const Viewprofile = () => {
   const handleClick = () => {
@@ -256,7 +257,7 @@ const Viewprofile = () => {
 
   // INI AKHIR CODE UNTUK LIST TABLE TEMPLATE PROFILE
 
-  //INI UNTUK MODAL EDIT TEMPLATE
+  //INI UNTUK MODAL ADD NEW TEMPLATE
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
     setIsModalOpen(true);
@@ -267,6 +268,19 @@ const Viewprofile = () => {
   };
   const handleCancel = () => {
     setIsModalOpen(false);
+  };
+
+  //INI UNTUK MODAL ADD NEW SITE
+  const [isModalOpenSite, setIsModalOpenSite] = useState(false);
+  const showModalSite = () => {
+    setIsModalOpenSite(true);
+  };
+  const handleOkSite = () => {
+    setIsModalOpenSite(false);
+    handleSubmitSite();
+  };
+  const handleCancelSite = () => {
+    setIsModalOpenSite(false);
   };
 
   // CONVERT DARI DETIK YANG DI TERIMA BACKEND KE MENIT, JAM, DAN HARI
@@ -321,7 +335,7 @@ const Viewprofile = () => {
   }, [idFromUrl]);
 
   // INI UNTUK POST DATA TAMBAH TEMPLATE DI DALAM PROFILE
-  const [id_plan_template, setId_plan_template] = useState("");
+
   // Definisikan state untuk nilai select yang dipilih
   const [selectedTemplate, setSelectedTemplate] = useState("");
 
@@ -377,6 +391,78 @@ const Viewprofile = () => {
     }
   };
 
+  // ini adalah post api untuk create new site
+  const [landingName, setLandingName] = useState("");
+  const [siteName, setSiteName] = useState("");
+  const [latitude, setLatitude] = useState("");
+  const [longtitude, setLongtitude] = useState("");
+
+  const handleLandingChange = (e) => {
+    setLandingName(e.target.value);
+  };
+  const handleSiteNameChange = (e) => {
+    setSiteName(e.target.value);
+  };
+  const handleLatitudeChange = (e) => {
+    setLatitude(e.target.value);
+  };
+  const handleLongtitudeChange = (e) => {
+    setLongtitude(e.target.value);
+  };
+
+  const handleSubmitSite = async (e) => {
+    if (e) e.preventDefault();
+    const postData = {
+      profile_id: idUrl,
+      landing_name: landingName,
+      name: siteName,
+      latitude: latitude,
+      longtitude: longtitude,
+    };
+    try {
+      const token = localStorage.getItem("access_token");
+
+      const response = await axios.post(
+        "http://172.16.26.97:5000/site",
+        postData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        }
+      );
+
+      console.log(response.status);
+
+      if (response.status === 200) {
+        toast.success("Registered Successfully.");
+        setLandingName("");
+        setSiteName("");
+        setLatitude("");
+        setLongtitude("");
+      } else if (response.status === 409) {
+        toast.error("Site already exists.");
+      } else {
+        setError("Failed to register, please try again.");
+      }
+    } catch (error) {
+      console.error(error);
+      if (error.response && error.response.status === 409) {
+        toast.error("Site already exists.");
+      } else {
+        setError("Failed to register, please try again.");
+        console.log(error);
+      }
+      if (error.response && error.response.status === 401) {
+        toast.error("You not have access!");
+      } else {
+        setError("Failed to register, please try again.");
+        console.log(error);
+      }
+    }
+  };
+
   return (
     <>
       <div className="mainContainer">
@@ -387,7 +473,7 @@ const Viewprofile = () => {
           onCancel={handleCancel}
         >
           <form className="formProfileEdit">
-            <h2>Name Profile : </h2>
+            {/* <h2>Name Profile : </h2> */}
             <div className="formInputProfileEdit">
               <label htmlFor="">ID Hostpot Profile</label>
               <input type="text" disabled value={idUrl} />
@@ -405,15 +491,51 @@ const Viewprofile = () => {
                   </option>
                 ))}
               </select>
-              {/* <select name="--list template--" id="">
-                <option value=""></option>
+            </div>
+          </form>
+        </Modal>
+        <Modal
+          title="Add new site"
+          open={isModalOpenSite}
+          onOk={handleOkSite}
+          onCancel={handleCancelSite}
+        >
+          <form className="formProfileNewSite">
+            <div className="formInputProfileEditSite">
+              <label htmlFor="">Landing Page Name</label>
+              <input
+                type="text"
+                value={landingName}
+                onChange={handleLandingChange}
+              />
+            </div>
 
-                {templates.map((template) => (
-                  <option key={template.id} value={template.id}>
-                    {template.id}
-                  </option>
-                ))}
-              </select> */}
+            <div className="formInputProfileEditSite">
+              <label htmlFor="">Name Site</label>
+              <input
+                type="text"
+                value={siteName}
+                onChange={handleSiteNameChange}
+              />
+            </div>
+            <div className="formInputProfileEditSite">
+              <label htmlFor="">Titik Koordinat</label>
+              <input
+                type="number"
+                placeholder="Longtitude"
+                value={latitude}
+                onChange={handleLatitudeChange}
+              />
+              <input
+                type="number"
+                placeholder="Latitude"
+                value={longtitude}
+                onChange={handleLongtitudeChange}
+              />
+            </div>
+            <div className="formInputProfileEditSite">
+              <label>Hotspot Profile ID</label>
+              <input type="text" disabled value={idUrl} />
             </div>
           </form>
         </Modal>
@@ -557,7 +679,12 @@ const Viewprofile = () => {
             <div className="listContainer">
               <div className="listTop">
                 <h2>List Template Used</h2>
-                <button onClick={showModal}>Add New Template</button>
+                <button onClick={showModal}>
+                  <span>
+                    <AddCircleOutlineIcon className="iconAdd" />
+                  </span>
+                  Add New Template
+                </button>
               </div>
               <div className="listBottom">
                 <div
@@ -574,6 +701,30 @@ const Viewprofile = () => {
               </div>
             </div>
             <div className="mrgBtn"></div>
+            <div className="listContainer">
+              <div className="listTop">
+                <h2>List Site Registered</h2>
+                <button onClick={showModalSite}>
+                  <span>
+                    <AddCircleOutlineIcon className="iconAdd" />
+                  </span>
+                  Create New Site
+                </button>
+              </div>
+              <div className="listBottom">
+                <div
+                  style={{ height: 371, width: "100%", overflowY: "hidden" }}
+                >
+                  <DataGrid
+                    rows={users}
+                    columns={columns.concat(actionColumn)}
+                    pageSize={5}
+                    rowsPerPageOptions={[5]}
+                    checkboxSelection
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

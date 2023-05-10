@@ -23,6 +23,7 @@ import Link from "@mui/material/Link";
 import HomeIcon from "@mui/icons-material/Home";
 import GrainIcon from "@mui/icons-material/Grain";
 import Leafletmap from "../leafletmap/Leafletmap";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 //INI UNTUK UPDATE DATA
 
@@ -165,33 +166,6 @@ const Site = (props) => {
     setAdministrator("");
     setValidated(false);
   };
-
-  //INI UNTUK MEMUNCULKAN DAN MENUTUP MODAL ALERT DELETE
-  // const handleCloseDelete = () => setDeleteShow(false);
-  // const handleShowDelete = () => setDeleteShow(true);
-
-  // useEffect(() => {
-  //   const token = localStorage.getItem("access_token");
-
-  //   if (!token) {
-  //     // no token found, redirect to login
-  //     navigate("/");
-  //   } else {
-  //     // check if token is valid
-  //     try {
-  //       const decoded = jwt_decode(token);
-  //       if (decoded.exp < Date.now() / 1000) {
-  //         // token has expired, redirect to login
-  //         // console.log(decoded);
-
-  //         navigate("/");
-  //       }
-  //     } catch (err) {
-  //       // invalid token, redirect to login
-  //       navigate("/");
-  //     }
-  //   }
-  // }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -370,99 +344,9 @@ const Site = (props) => {
             <ToastContainer />
 
             <button className="new-account" onClick={toClient}>
-              <GroupAddIcon className="iconAdd" />
+              <AddCircleOutlineIcon className="iconAdd" />
               <span className="textAdd">Add New Site</span>{" "}
             </button>
-            {/* <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Create new account</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handleSubmit} noValidate validated={validated}>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Full Name</Form.Label>
-              <Form.Control
-                type="username"
-                placeholder="full name"
-                autoFocus
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required="required"
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="name@tachyon.net.id"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required="required"
-              />
-            </Form.Group>
-
-            <div className="row">
-              <div className="col">
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required="required"
-                />{" "}
-              </div>
-              <div className="col">
-                <Form.Label>Confirm Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  value={confPassword}
-                  onChange={(e) => setConfPassword(e.target.value)}
-                  required="required"
-                />{" "}
-              </div>
-            </div>
-            <div className="row" id="status">
-              <div className="col">
-                <Form.Label>Status</Form.Label>
-                <Form.Select
-                  value={status}
-                  onChange={(e) => setStatus(e.target.value)}
-                  required="required"
-                >
-                  <option></option>
-                  <option>Active</option>
-                  <option>Disable</option>
-                </Form.Select>
-              </div>
-              <div className="col">
-                <Form.Label>Access</Form.Label>
-                <Form.Select
-                  value={administrator}
-                  onChange={(e) => setAdministrator(e.target.value)}
-                  required="required"
-                  id="administratorId"
-                >
-                  <option></option>
-                  <option value={true}>Admin</option>
-                  <option value={false}>Users</option>
-                </Form.Select>
-              </div>
-            </div>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="secondary"
-            className="close-btn"
-            onClick={handleClose}
-          >
-            Close
-          </Button>
-          <Button className="submit-btn" type="submit" onClick={handleSubmit}>
-            Create
-          </Button>
-        </Modal.Footer>
-      </Modal> */}
 
             <Box
               sx={{
