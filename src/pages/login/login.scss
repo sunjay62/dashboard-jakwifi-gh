@@ -264,19 +264,18 @@
   color: #4fa4ff; /* Color of the text when the checkbox is checked */
 }
 
-input[type="submit"] {
+.btn-login[type="submit"] {
   border: none;
   outline: none;
   background: #4fa4ff;
   padding: 11px 25px;
-  width: 100px;
   margin-top: 10px;
   border-radius: 5px;
   font-weight: 600;
   cursor: pointer;
 }
 
-input[type="submit"]:hover {
+.btn-login[type="submit"]:hover {
   background: #0cefff;
   transition: 0.5s;
 }

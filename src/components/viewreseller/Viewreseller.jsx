@@ -46,6 +46,9 @@ const Viewreseller = () => {
   useEffect(() => {
     const accessToken = localStorage.getItem("access_token");
     const refreshToken = localStorage.getItem("refresh_token");
+
+    console.log(accessToken);
+
     axios
       .get(`http://172.16.26.97:5000/administrator/${id}`, {
         headers: {

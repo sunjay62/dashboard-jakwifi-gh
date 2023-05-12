@@ -69,6 +69,89 @@ const Viewprofile = () => {
       .catch((err) => console.log(err));
   }, [id]);
 
+  // INI UNTUK GET API LIST SITE BY ID
+  const [sites, setSites] = useState([]);
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem("access_token");
+    const refreshToken = localStorage.getItem("refresh_token");
+    axios
+      .get(`http://172.16.26.97:5000/site/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: accessToken,
+        },
+      })
+      .then((res) => {
+        setSites(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, [id]);
+
+  // INI AWAL CODE UNTUK LIST TABLE TEMPLATE PROFILE
+
+  const columnSites = [
+    { field: "id", headerName: "ID", width: 50 },
+    { field: "profile_id", headerName: "Profile ID", width: 100 },
+    { field: "name", headerName: "Name", width: 150 },
+    { field: "landing_name", headerName: "Landing Name", width: 180 },
+    { field: "latitude", headerName: "Latitude", width: 150 },
+    { field: "longtitude", headerName: "Longtitude", width: 150 },
+    // { field: "kuota", headerName: "Kuota", width: 100 },
+    // {
+    //   field: "uptime",
+    //   headerName: "Uptime",
+    //   width: 100,
+    //   valueGetter: (params) => convertUptime(params.value),
+    // },
+    // { field: "limit_shared", headerName: "Shared", width: 100 },
+  ];
+
+  const actionColumnSite = [
+    {
+      field: "action",
+      headerName: "Action",
+      width: 100,
+      renderCell: (rowData) => {
+        return (
+          <>
+            <div className="cellAction">
+              <Tooltip title="View" arrow>
+                <div className="viewButtonOperator"></div>
+              </Tooltip>
+              <Tooltip title="Delete" arrow>
+                <div>
+                  <Popconfirm
+                    className="cellAction"
+                    title="Delete Account"
+                    description="Are you sure to delete this account?"
+                    onConfirm={() => deleteAccount(rowData.row.id_registered)}
+                    icon={
+                      <QuestionCircleOutlined
+                        style={{
+                          color: "red",
+                        }}
+                      />
+                    }
+                  >
+                    <div className="deleteButtonOperator">
+                      <DeleteForeverIcon />
+                    </div>
+                  </Popconfirm>
+                </div>
+              </Tooltip>
+            </div>
+          </>
+        );
+      },
+    },
+  ];
+
+  // INI AKHIR CODE UNTUK LIST TABLE TEMPLATE PROFILE
+
+  // INI AKHIR UNTUK GET AP LIST SITE BY ID
+
   useEffect(() => {
     // Ambil access token dari local storage
     const storedToken = localStorage.getItem("access_token");
@@ -716,8 +799,8 @@ const Viewprofile = () => {
                   style={{ height: 371, width: "100%", overflowY: "hidden" }}
                 >
                   <DataGrid
-                    rows={users}
-                    columns={columns.concat(actionColumn)}
+                    rows={sites}
+                    columns={columnSites.concat(actionColumnSite)}
                     pageSize={5}
                     rowsPerPageOptions={[5]}
                     checkboxSelection

@@ -110,6 +110,14 @@ const Login = () => {
     }
   };
 
+  //untuk login with enter
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleLogin(e);
+    }
+  };
+
   return (
     <div className="container">
       <div className="flexContainer">
@@ -121,7 +129,12 @@ const Login = () => {
           <div className="containerLogin">
             <div className="boxTwo">
               <div className="box">
-                <div className="form" noValidate validated={validated}>
+                <form
+                  className="form"
+                  noValidate
+                  validated={validated}
+                  onSubmit={handleLogin}
+                >
                   {error && (
                     <span className="wrong-user">Wrong Email or Password!</span>
                   )}
@@ -144,6 +157,7 @@ const Login = () => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required="required"
+                      onKeyDown={handleKeyDown} // Handle Enter key press
                     />
                     <span>Password</span>
                     <i></i>
@@ -163,8 +177,10 @@ const Login = () => {
                       <a href="#">Sign Up</a>
                     </div>
                   </div>
-                  <input type="submit" value="Login" onClick={handleLogin} />
-                </div>
+                  <button type="submit" className="btn-login">
+                    Login
+                  </button>
+                </form>
               </div>
             </div>
           </div>
