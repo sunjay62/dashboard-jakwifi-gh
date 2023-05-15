@@ -313,14 +313,6 @@ const Site = (props) => {
 
   // INI UNTUK POST DATA TAMBAH TEMPLATE DI DALAM PROFILE
 
-  // Definisikan state untuk nilai select yang dipilih
-  const [selectedProfile, setSelectedProfile] = useState("");
-
-  // Fungsi untuk menangani perubahan nilai select
-  const handleSelectChange = (e) => {
-    setSelectedProfile(e.target.value);
-  };
-
   const [isModalOpenSite, setIsModalOpenSite] = useState(false);
   const showModalSite = () => {
     setIsModalOpenSite(true);
@@ -338,6 +330,7 @@ const Site = (props) => {
   const [siteName, setSiteName] = useState("");
   const [latitude, setLatitude] = useState("");
   const [longtitude, setLongtitude] = useState("");
+  const [selectedProfile, setSelectedProfile] = useState("");
 
   const handleLandingChange = (e) => {
     setLandingName(e.target.value);
@@ -350,6 +343,10 @@ const Site = (props) => {
   };
   const handleLongtitudeChange = (e) => {
     setLongtitude(e.target.value);
+  };
+
+  const handleSelectChange = (e) => {
+    setSelectedProfile(e.target.value);
   };
 
   const handleSubmitSite = async (e) => {
@@ -445,10 +442,7 @@ const Site = (props) => {
     setIdSite(id);
     setIsModalOpenEditSite(true);
   };
-  const handleOkEditSite = () => {
-    setIsModalOpenSite(false);
-    handleSubmitEditSite();
-  };
+
   const handleCancelEditSite = () => {
     setIsModalOpenEditSite(false);
   };
@@ -461,6 +455,7 @@ const Site = (props) => {
   const [longtitudeEdit, setLongtitudeEdit] = useState("");
   const [siteNameEdit, setSiteNameEdit] = useState("");
   const [selectedProfileEdit, setSelectedProfileEdit] = useState("");
+  const [selectedProfileIdEdit, setSelectedProfileIdEdit] = useState("");
 
   const handleIdSite = (event) => {
     setIdSite(event.target.value);
@@ -477,9 +472,6 @@ const Site = (props) => {
   const hanldeLongtitudeSite = (event) => {
     setLongtitudeEdit(event.target.value);
   };
-  const handleSelectSite = (e) => {
-    setSelectedProfileEdit(e.target.value);
-  };
 
   const handleSubmitEditSite = (event) => {
     event.preventDefault();
@@ -492,22 +484,21 @@ const Site = (props) => {
       latitude: latitudeEdit,
       longtitude: longtitudeEdit,
       name: siteNameEdit,
-      profile_id: selectedProfileEdit,
+      profile_id: selectedProfileIdEdit,
     };
-    axios.put(`http://172.16.26.97:5000/site`, updatedUserData, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: accessToken,
-      },
-    });
+    axios
+      .put(`http://172.16.26.97:5000/site`, updatedUserData, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: accessToken,
+        },
+      })
 
-    console
-      .log(updatedUserData)
       .then((response) => {
         if (response.status === 200) {
           toast.success("Updated Successfully.");
           getApi();
-          handleOkEditSite();
+          setIsModalOpenEditSite(false);
         } else {
           setError("Failed to update, please try again.");
         }
@@ -521,7 +512,7 @@ const Site = (props) => {
     const accessToken = localStorage.getItem("access_token");
     const refreshToken = localStorage.getItem("refresh_token");
     axios
-      .get(`http://172.16.26.97:5000/site/${id}`, {
+      .get(`http://172.16.26.97:5000/site/${idSite}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: accessToken,
@@ -534,10 +525,11 @@ const Site = (props) => {
         setLatitudeEdit(res.data.latitude);
         setLongtitudeEdit(res.data.longtitude);
         setLandingNameEdit(res.data.landing_name);
-        // setLandingName(res.data.profile_info.name);
+        setSelectedProfileIdEdit(res.data.profile_id);
+        setSelectedProfileEdit(res.data.profile_info.name);
       })
       .catch((err) => console.log(err));
-  }, [id]);
+  }, [idSite]);
 
   return (
     <>
@@ -625,14 +617,14 @@ const Site = (props) => {
                   <input
                     type="number"
                     placeholder="Longtitude"
-                    value={latitude}
-                    onChange={handleLatitudeChange}
+                    value={longtitude}
+                    onChange={handleLongtitudeChange}
                   />
                   <input
                     type="number"
                     placeholder="Latitude"
-                    value={longtitude}
-                    onChange={handleLongtitudeChange}
+                    value={latitude}
+                    onChange={handleLatitudeChange}
                   />
                 </div>
                 <div className="formInputProfileEditSite">
@@ -654,19 +646,10 @@ const Site = (props) => {
             <Modal
               title="Update Site"
               open={isModalOpenEditSite}
-              onOk={handleOkEditSite}
+              onOk={handleSubmitEditSite}
               onCancel={handleCancelEditSite}
             >
               <form className="formProfileNewSite">
-                {/* <div className="formInputProfileEditSite">
-                  <label htmlFor="">ID Site</label>
-                  <input
-                    type="text"
-                    value={idSite}
-                    onChange={handleIdSite}
-                    disabled
-                  />
-                </div> */}
                 <div className="formInputProfileEditSite">
                   <label htmlFor="">Landing Page Name</label>
                   <input
@@ -688,33 +671,20 @@ const Site = (props) => {
                   <label htmlFor="">Titik Koordinat</label>
                   <input
                     type="number"
-                    placeholder="Latitude"
-                    value={latitudeEdit}
-                    onChange={handleLatitudeSite}
-                  />
-                  <input
-                    type="number"
                     placeholder="Longtitude"
                     value={longtitudeEdit}
                     onChange={hanldeLongtitudeSite}
                   />
+                  <input
+                    type="number"
+                    placeholder="Latitude"
+                    value={latitudeEdit}
+                    onChange={handleLatitudeSite}
+                  />
                 </div>
                 <div className="formInputProfileEditSite">
-                  <label>Hotspot Profile ID</label>
-                  <select
-                    value={selectedProfileEdit}
-                    onChange={handleSelectSite}
-                  >
-                    <option value="" disabled selected>
-                      --Choose an option--
-                    </option>
-
-                    {profiles.map((profile) => (
-                      <option key={profile.id} value={profile.id}>
-                        {profile.name}
-                      </option>
-                    ))}
-                  </select>
+                  <label>Hotspot Profile Name</label>
+                  <input value={selectedProfileEdit} disabled></input>
                 </div>
               </form>
             </Modal>

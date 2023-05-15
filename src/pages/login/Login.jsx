@@ -15,6 +15,7 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { fontSize } from "@mui/system";
 import Cookies from "js-cookie";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 // //INI UNTUK REMEMBER ME
 // const rememberCheckbox = document.getElementById("remember");
@@ -159,6 +160,7 @@ const Login = () => {
                       required="required"
                       onKeyDown={handleKeyDown} // Handle Enter key press
                     />
+
                     <span>Password</span>
                     <i></i>
                   </div>
