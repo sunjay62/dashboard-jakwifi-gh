@@ -234,7 +234,19 @@ const Sidebar = () => {
             alt=""
           ></img>
         </div>
+
         <ul className="nav-links">
+          {/* <div className="userContainer">
+            <p>
+              Name : <span>Sunan Jaya</span>
+            </p>
+            <p>
+              Expired : <span>2 Days</span>
+            </p>
+            <p>
+              Device : <span>Mozila Firefox</span>
+            </p>
+          </div> */}
           <li onClick={home}>
             <a href="#" onClick={home}>
               {/* <i className="bx bx-grid-alt"></i> */}

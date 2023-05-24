@@ -76,14 +76,14 @@ const Viewprofile = () => {
     const accessToken = localStorage.getItem("access_token");
     const refreshToken = localStorage.getItem("refresh_token");
     axios
-      .get(`http://172.16.26.97:5000/site/${id}`, {
+      .get(`http://172.16.26.97:5000/site/hotspot_profile/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: accessToken,
         },
       })
       .then((res) => {
-        setSites(res.data);
+        setSites(res.data.data);
         console.log(res.data);
       })
       .catch((err) => console.log(err));
@@ -92,9 +92,9 @@ const Viewprofile = () => {
   // INI AWAL CODE UNTUK LIST TABLE TEMPLATE PROFILE
 
   const columnSites = [
-    { field: "id", headerName: "ID", width: 50 },
+    { field: "id", headerName: "ID", width: 75 },
     { field: "profile_id", headerName: "Profile ID", width: 100 },
-    { field: "name", headerName: "Name", width: 150 },
+    { field: "name", headerName: "Name", width: 180 },
     { field: "landing_name", headerName: "Landing Name", width: 180 },
     { field: "latitude", headerName: "Latitude", width: 150 },
     { field: "longtitude", headerName: "Longtitude", width: 150 },

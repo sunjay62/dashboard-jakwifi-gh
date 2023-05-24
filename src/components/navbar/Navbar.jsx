@@ -7,11 +7,14 @@ import NotificationsActiveOutlinedIcon from "@mui/icons-material/NotificationsAc
 import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
-import PersonSearchOutlinedIcon from "@mui/icons-material/PersonSearchOutlined";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Cookie from "js-cookie";
 import axios from "axios";
+import DevicesIcon from "@mui/icons-material/Devices";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import jwtDecode from "jwt-decode";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const Navbar = ({ handleClick }) => {
   // INI CSS UNTUK ROTATE ICON HIDE SIDEBAR, CUMA ADA BUG
@@ -110,6 +113,36 @@ const Navbar = ({ handleClick }) => {
     };
   }, []);
 
+  // INI UNTUK DECODE TOKEN AGAR BISA MENAMPILKAN DATA
+
+  const [decodedData, setDecodedData] = useState(null);
+
+  useEffect(() => {
+    // Ambil token JWT dari localStorage
+    const accessToken = localStorage.getItem("access_token");
+
+    if (accessToken) {
+      // Dekode token
+      const decoded = jwtDecode(accessToken);
+      // Simpan data yang diambil dari token ke dalam state
+      setDecodedData(decoded);
+    }
+  }, []);
+
+  const formatLocalTime = (epoch) => {
+    const date = new Date(epoch * 1000);
+    return date.toLocaleString("en-US", { timeZone: "Asia/Jakarta" });
+  };
+
+  const extractBrowserName = (deviceString) => {
+    const regex = /(Chrome|Firefox|Safari|Edge|Opera)(?=\/[\d.]+)/;
+    const matches = deviceString.match(regex);
+    if (matches && matches.length > 0) {
+      return matches[0];
+    }
+    return "";
+  };
+
   return (
     <div className="navbar">
       <div className="wrapper">
@@ -156,14 +189,30 @@ const Navbar = ({ handleClick }) => {
             />
             {showDropdown && (
               <div className="dropdown">
-                <a onClick={() => alert("Profile clicked")}>
-                  <PersonSearchOutlinedIcon className="dropdownIcon" />
-                  Profile
-                </a>
-                <a onClick={() => alert("Setting clicked")}>
-                  <SettingsOutlinedIcon className="dropdownIcon" />
-                  Setting
-                </a>
+                {decodedData && (
+                  <Tooltip title="User" arrow>
+                    <a onClick={() => alert("Profile clicked")}>
+                      <PersonOutlineIcon className="dropdownIcon" />
+                      {decodedData.name}
+                    </a>
+                  </Tooltip>
+                )}
+                {decodedData && (
+                  <Tooltip title="Expired Time" arrow>
+                    <a onClick={() => alert("Setting clicked")}>
+                      <AccessTimeIcon className="dropdownIcon" />
+                      {formatLocalTime(decodedData.expired)}
+                    </a>
+                  </Tooltip>
+                )}
+                {decodedData && (
+                  <Tooltip title="Browser" arrow>
+                    <a onClick={() => alert("Setting clicked")}>
+                      <DevicesIcon className="dropdownIcon" />
+                      {extractBrowserName(decodedData.device)}
+                    </a>
+                  </Tooltip>
+                )}
                 <hr />
                 <a onClick={logout}>
                   {loading && (

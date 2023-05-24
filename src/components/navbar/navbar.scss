@@ -101,13 +101,13 @@
   background: rgb(74, 165, 250);
   min-width: 150px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  padding: 10px 13px;
+  padding: 15px 15px;
   border-radius: 5px;
 }
 
 .dropdown a {
   display: flex;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   color: white;
   text-decoration: none;
   border-radius: 10px;
@@ -119,13 +119,14 @@
 
 .dropdown a .dropdownIcon {
   font-size: 20px;
-  margin-right: 5px;
+  margin-top: 1px;
+  margin-right: 10px;
 }
 
 .dropdown a:hover {
-  color: #fff;
+  color: #ffffff;
   transition: all 0.3s;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 /* Mengatur style panah */

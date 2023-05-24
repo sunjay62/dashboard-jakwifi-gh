@@ -26,6 +26,7 @@ import Leafletmap from "../leafletmap/Leafletmap";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { Tooltip } from "@material-ui/core";
 import RateReviewIcon from "@mui/icons-material/RateReview";
+import fetchDataSite from "../leafletmap/Leafletmap";
 
 //INI UNTUK UPDATE DATA
 
@@ -331,6 +332,7 @@ const Site = (props) => {
   const [latitude, setLatitude] = useState("");
   const [longtitude, setLongtitude] = useState("");
   const [selectedProfile, setSelectedProfile] = useState("");
+  const [isRegistered, setIsRegistered] = useState(false);
 
   const handleLandingChange = (e) => {
     setLandingName(e.target.value);

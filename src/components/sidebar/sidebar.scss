@@ -382,3 +382,22 @@
 .end {
   height: 30vh;
 }
+
+.userContainer {
+  margin-top: -25px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgb(214, 214, 214);
+}
+
+.userContainer p {
+  width: 75%;
+  margin-left: 10%;
+  font-size: 15px;
+  font-weight: 500;
+  color: rgb(155, 155, 155);
+
+  span {
+    float: right;
+    width: 60%;
+  }
+}
