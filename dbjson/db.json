@@ -1,54 +1,116 @@
 {
-  "data": [
-    {
-      "key": "1",
-      "name": "John Brown",
-      "age": 32,
-      "address": "New York No. 1 Lake Park"
-    },
-    {
-      "key": "2",
-      "name": "Joe Black",
-      "age": 42,
-      "address": "London No. 1 Lake Park"
-    },
-    {
-      "key": "3",
-      "name": "Jim Green",
-      "age": 32,
-      "address": "Sydney No. 1 Lake Park"
-    },
-    {
-      "key": "4",
-      "name": "Jim Red",
-      "age": 32,
-      "address": "London No. 2 Lake Park"
-    }
-  ],
-  "markers": [
+  "packages": [
     {
       "id": 1,
-      "alamat": "Jl. Sudirman No. 1, Jakarta Pusat",
-      "client": "PT. ABC",
-      "position": [-6.2853697372824335, 106.90094236973619]
+      "title": "PAKET 1 JAM",
+      "price": "Rp. 10000",
+      "kuota": "Kuota Unlimited",
+      "device": "1 Device",
+      "desc": "Internet Stabil"
     },
     {
       "id": 2,
-      "alamat": "Jl. Thamrin No. 2, Jakarta Pusat",
-      "client": "PT. XYZ",
-      "position": [-6.2583754627297195, 106.97069895147673]
+      "title": "PAKET 1 HARI",
+      "price": "Rp. 20000",
+      "kuota": "Kuota Unlimited",
+      "device": "5 Device",
+      "desc": "Internet Stabil"
     },
     {
-      "id": "TCF-11099",
-      "client": "Jakwifi Site Kec Koja Kel Koja RW 005",
-      "alamat": "Balai Warga Jalan raya pelabuhan , lorong t RT 09 RW 05",
-      "position": [-6.237884762921482, 106.8425559966484]
+      "id": 3,
+      "title": "PAKET 1 MINGGU",
+      "price": "Rp. 30000",
+      "kuota": "Kuota Unlimited",
+      "device": "10 Device",
+      "desc": "Internet Stabil"
     },
     {
-      "id": "TCF-11099",
-      "client": "Jakwifi Site Kec Koja Kel Koja RW 005",
-      "alamat": "Balai Warga Jalan raya pelabuhan , lorong t RT 09 RW 05",
-      "position": [-6.2985381039621275, 106.95687266602577]
+      "id": 4,
+      "title": "PAKET 1 BULAN",
+      "price": "Rp. 100000",
+      "kuota": "Kuota Unlimited",
+      "device": "Unlimited Device",
+      "desc": "Internet Stabil"
+    },
+    {
+      "id": 5,
+      "title": "PAKET 3 HARI",
+      "price": "Rp. 25000",
+      "kuota": "Kuota Unlimited",
+      "device": "3 Device",
+      "desc": "Internet Stabil"
+    },
+    {
+      "id": 6,
+      "title": "PAKET 3 HARI",
+      "price": "Rp. 25000",
+      "kuota": "Kuota Unlimited",
+      "device": "3 Device",
+      "desc": "Internet Stabil"
+    },
+    {
+      "id": 7,
+      "title": "PAKET 3 HARI",
+      "price": "Rp. 25000",
+      "kuota": "Kuota Unlimited",
+      "device": "3 Device",
+      "desc": "Internet Stabil"
+    },
+    {
+      "id": 8,
+      "title": "PAKET 3 HARI",
+      "price": "Rp. 25000",
+      "kuota": "Kuota Unlimited",
+      "device": "3 Device",
+      "desc": "Internet Stabil"
+    },
+    {
+      "id": 9,
+      "title": "PAKET 3 HARI",
+      "price": "Rp. 25000",
+      "kuota": "Kuota Unlimited",
+      "device": "3 Device",
+      "desc": "Internet Stabil"
+    },
+    {
+      "id": 10,
+      "title": "PAKET 3 HARI",
+      "price": "Rp. 25000",
+      "kuota": "Kuota Unlimited",
+      "device": "3 Device",
+      "desc": "Internet Stabil"
+    },
+    {
+      "id": 11,
+      "title": "PAKET 3 HARI",
+      "price": "Rp. 25000",
+      "kuota": "Kuota Unlimited",
+      "device": "3 Device",
+      "desc": "Internet Stabil"
+    },
+    {
+      "title": "PAKET  TAHUN",
+      "price": "",
+      "kuota": "Kuota Unlimited",
+      "device": "10",
+      "desc": "",
+      "id": 12
+    },
+    {
+      "title": "PAKET 1 TAHUN",
+      "price": "",
+      "kuota": "Kuota Unlimited",
+      "device": "10",
+      "desc": "",
+      "id": 13
+    },
+    {
+      "title": "PAKET 1 TAHUN",
+      "price": "20000",
+      "kuota": "Kuota Unlimited",
+      "device": "10",
+      "desc": "Internet stabil banget",
+      "id": 14
     }
   ]
 }

@@ -20,6 +20,7 @@ import { Tooltip } from "@material-ui/core";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { Modal } from "antd";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import RateReviewIcon from "@mui/icons-material/RateReview";
 
 const Viewprofile = () => {
   const handleClick = () => {
@@ -70,6 +71,7 @@ const Viewprofile = () => {
   }, [id]);
 
   // INI UNTUK GET API LIST SITE BY ID
+
   const [sites, setSites] = useState([]);
 
   useEffect(() => {
@@ -89,9 +91,39 @@ const Viewprofile = () => {
       .catch((err) => console.log(err));
   }, [id]);
 
+  function getApi2() {
+    const fetchAllUsers = async () => {
+      try {
+        const token = localStorage.getItem("access_token");
+        // console.log(token);
+
+        const res = await axios.get(
+          `http://172.16.26.97:5000/site/hotspot_profile/${id}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token,
+            },
+          }
+        );
+        setSites(res.data.data);
+        console.log(res.data);
+      } catch (err) {
+        console.log(err);
+        // await handleRefreshToken();
+      }
+    };
+    fetchAllUsers();
+  }
+
   // INI AWAL CODE UNTUK LIST TABLE TEMPLATE PROFILE
 
   const columnSites = [
+    {
+      field: "no",
+      headerName: "No",
+      width: 25,
+    },
     { field: "id", headerName: "ID", width: 75 },
     { field: "profile_id", headerName: "Profile ID", width: 100 },
     { field: "name", headerName: "Name", width: 180 },
@@ -118,15 +150,20 @@ const Viewprofile = () => {
           <>
             <div className="cellAction">
               <Tooltip title="View" arrow>
-                <div className="viewButtonOperator"></div>
+                <div className="viewButtonOperator">
+                  <RateReviewIcon
+                    className="viewIcon"
+                    onClick={() => showModalEditSite(rowData.id)}
+                  />
+                </div>
               </Tooltip>
               <Tooltip title="Delete" arrow>
                 <div>
                   <Popconfirm
                     className="cellAction"
-                    title="Delete Account"
-                    description="Are you sure to delete this account?"
-                    onConfirm={() => deleteAccount(rowData.row.id_registered)}
+                    title="Delete Site"
+                    description="Are you sure to delete this site?"
+                    onConfirm={() => deleteSite(rowData.id)}
                     icon={
                       <QuestionCircleOutlined
                         style={{
@@ -273,17 +310,66 @@ const Viewprofile = () => {
     }
   };
 
+  // INI UNTUK DELETE SITE
+
+  const deleteSite = async (id_registered) => {
+    try {
+      const token = localStorage.getItem("access_token");
+      // console.log(id_registered);
+      const res = await axios.delete(`http://172.16.26.97:5000/site`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+        data: {
+          id: `${id_registered}`,
+        },
+      });
+      console.log(res.data.id);
+
+      if (res.status === 200) {
+        toast.success("Deleted Successfuly.");
+        getApi2();
+      } else {
+        toast.error("Failed to delete user, please try again.");
+      }
+    } catch (err) {
+      console.log(err);
+      // await handleRefreshToken();
+    }
+  };
+
   const [file, setFile] = useState("");
 
   // INI AWAL CODE UNTUK LIST TABLE TEMPLATE PROFILE
 
   const columns = [
+    {
+      field: "no",
+      headerName: "No",
+      width: 25,
+    },
     { field: "id_registered", headerName: "ID", width: 70 },
     { field: "name", headerName: "Name", width: 180 },
-    { field: "price", headerName: "Price", width: 100 },
+    {
+      field: "price",
+      headerName: "Price",
+      width: 100,
+      valueGetter: (params) => convertPrice(params.value),
+    },
     { field: "type_id", headerName: "Plan ID", width: 100 },
-    { field: "expired", headerName: "Expired", width: 100 },
-    { field: "kuota", headerName: "Kuota", width: 100 },
+    {
+      field: "expired",
+      headerName: "Expired",
+      width: 100,
+      valueGetter: (params) => convertExpired(params.value),
+    },
+    {
+      field: "kuota",
+      headerName: "Kuota",
+      width: 100,
+      valueGetter: (params) => convertKuota(params.value),
+    },
     {
       field: "uptime",
       headerName: "Uptime",
@@ -379,6 +465,38 @@ const Viewprofile = () => {
       return uptime + " Seconds";
     }
   }
+  function convertExpired(expired) {
+    if (expired >= 86400) {
+      return Math.floor(expired / 86400) + " Days";
+    } else if (expired >= 3600) {
+      return Math.floor(expired / 3600) + " Hours";
+    } else if (expired >= 60) {
+      return Math.floor(expired / 60) + " Minutes";
+    } else {
+      return expired + " Seconds";
+    }
+  }
+
+  function convertPrice(price) {
+    const formatter = new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    });
+
+    return formatter.format(price);
+  }
+
+  const convertKuota = (value) => {
+    if (value < 1024) {
+      return `${value} Kbps`;
+    } else if (value < 1000000) {
+      return `${(value / 1024).toFixed(2)} Mbps`;
+    } else {
+      return `${(value / 1000000).toFixed(2)} Gbps`;
+    }
+  };
 
   //GET LIST PLAN TEMPLATE
   useEffect(() => {
@@ -398,8 +516,8 @@ const Viewprofile = () => {
         );
 
         setTemplates(response.data.data);
-        console.log(response.data.data);
-        console.log(JSON.stringify(response.data.data));
+        // console.log(response.data.data);
+        // console.log(JSON.stringify(response.data.data));
       } catch (e) {
         console.log(e);
         console.log("access token sudah expired");
@@ -524,6 +642,7 @@ const Viewprofile = () => {
         setSiteName("");
         setLatitude("");
         setLongtitude("");
+        getApi2();
       } else if (response.status === 409) {
         toast.error("Site already exists.");
       } else {
@@ -544,6 +663,113 @@ const Viewprofile = () => {
         console.log(error);
       }
     }
+  };
+
+  // INI UNTUK EDIT SITE MEMUNCULKAN MODAL
+
+  const [idSite, setIdSite] = useState("");
+  const [isModalOpenSiteEdit, setIsModalOpenSiteEdit] = useState(false);
+  const [landingNameEdit, setLandingNameEdit] = useState("");
+  const [latitudeEdit, setLatitudeEdit] = useState("");
+  const [longtitudeEdit, setLongtitudeEdit] = useState("");
+  const [siteNameEdit, setSiteNameEdit] = useState("");
+  const [selectedProfileEdit, setSelectedProfileEdit] = useState("");
+  const [selectedProfileIdEdit, setSelectedProfileIdEdit] = useState("");
+
+  const showModalEditSite = (id) => {
+    setIdSite(id);
+    setIsModalOpenSiteEdit(true);
+  };
+  const handleOkSiteEdit = () => {
+    setIsModalOpenSiteEdit(false);
+  };
+  const handleCancelSiteEdit = () => {
+    setIsModalOpenSiteEdit(false);
+  };
+
+  // INI UNTUK GET DATA UPDATE
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem("access_token");
+    const refreshToken = localStorage.getItem("refresh_token");
+    axios
+      .get(`http://172.16.26.97:5000/site/${idSite}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: accessToken,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+
+        setIdSite(res.data.id);
+        setSiteNameEdit(res.data.name);
+        setLatitudeEdit(res.data.latitude);
+        setLongtitudeEdit(res.data.longtitude);
+        setLandingNameEdit(res.data.landing_name);
+        setSelectedProfileIdEdit(res.data.profile_id);
+        setSelectedProfileEdit(res.data.profile_info.name);
+      })
+      .catch((err) => console.log(err));
+  }, [idSite]);
+
+  // INI UNTUK POST DATA TAMBAH TEMPLATE DI DALAM PROFILE
+
+  const handleIdSite = (event) => {
+    setIdSite(event.target.value);
+  };
+  const handleLandingSite = (event) => {
+    setLandingNameEdit(event.target.value);
+  };
+  const handleNameSite = (event) => {
+    setSiteNameEdit(event.target.value);
+  };
+  const handleLatitudeSite = (event) => {
+    setLatitudeEdit(event.target.value);
+  };
+  const hanldeLongtitudeSite = (event) => {
+    setLongtitudeEdit(event.target.value);
+  };
+
+  const handleSubmitEditSite = (event) => {
+    event.preventDefault();
+
+    const accessToken = localStorage.getItem("access_token");
+    const refreshToken = localStorage.getItem("refresh_token");
+    const updatedUserData = {
+      id: idSite,
+      landing_name: landingNameEdit,
+      latitude: latitudeEdit,
+      longtitude: longtitudeEdit,
+      name: siteNameEdit,
+      profile_id: selectedProfileIdEdit,
+    };
+    axios
+      .put(`http://172.16.26.97:5000/site`, updatedUserData, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: accessToken,
+        },
+      })
+
+      .then((response) => {
+        if (response.status === 200) {
+          toast.success("Updated Successfully.");
+          getApi2();
+          handleOkSiteEdit();
+        } else {
+          setError("Failed to update, please try again.");
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  // INI UNTUK PEMBUATAN NOMOR URUT SECARA OTOMATIS
+  const addIndex = (array) => {
+    return array.map((item, index) => {
+      item.no = index + 1;
+      return item;
+    });
   };
 
   return (
@@ -619,6 +845,51 @@ const Viewprofile = () => {
             <div className="formInputProfileEditSite">
               <label>Hotspot Profile ID</label>
               <input type="text" disabled value={idUrl} />
+            </div>
+          </form>
+        </Modal>
+        <Modal
+          title="Update Site"
+          open={isModalOpenSiteEdit}
+          onOk={handleSubmitEditSite}
+          onCancel={handleCancelSiteEdit}
+        >
+          <form className="formProfileNewSite">
+            <div className="formInputProfileEditSite">
+              <label htmlFor="">Landing Page Name</label>
+              <input
+                type="text"
+                value={landingNameEdit}
+                onChange={handleLandingSite}
+              />
+            </div>
+
+            <div className="formInputProfileEditSite">
+              <label htmlFor="">Name Site</label>
+              <input
+                type="text"
+                value={siteNameEdit}
+                onChange={handleNameSite}
+              />
+            </div>
+            <div className="formInputProfileEditSite">
+              <label htmlFor="">Titik Koordinat</label>
+              <input
+                type="number"
+                placeholder="Longtitude"
+                value={longtitudeEdit}
+                onChange={hanldeLongtitudeSite}
+              />
+              <input
+                type="number"
+                placeholder="Latitude"
+                value={latitudeEdit}
+                onChange={handleLatitudeSite}
+              />
+            </div>
+            <div className="formInputProfileEditSite">
+              <label>Hotspot Profile Name</label>
+              <input value={selectedProfileEdit} disabled></input>
             </div>
           </form>
         </Modal>
@@ -774,11 +1045,10 @@ const Viewprofile = () => {
                   style={{ height: 371, width: "100%", overflowY: "hidden" }}
                 >
                   <DataGrid
-                    rows={users}
+                    rows={addIndex(users)}
                     columns={columns.concat(actionColumn)}
                     pageSize={5}
                     rowsPerPageOptions={[5]}
-                    checkboxSelection
                   />
                 </div>
               </div>
@@ -799,11 +1069,10 @@ const Viewprofile = () => {
                   style={{ height: 371, width: "100%", overflowY: "hidden" }}
                 >
                   <DataGrid
-                    rows={sites}
+                    rows={addIndex(sites)}
                     columns={columnSites.concat(actionColumnSite)}
                     pageSize={5}
                     rowsPerPageOptions={[5]}
-                    checkboxSelection
                   />
                 </div>
               </div>

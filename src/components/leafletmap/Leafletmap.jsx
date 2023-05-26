@@ -26,8 +26,8 @@ const Leafletmap = () => {
         });
 
         setMarkers(response.data.data);
-        console.log(response.data.data);
-        console.log(JSON.stringify(response.data.data));
+        // console.log(response.data.data);
+        // console.log(JSON.stringify(response.data.data));
       } catch (e) {
         console.log(e);
         console.log("access token sudah expired");

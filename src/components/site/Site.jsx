@@ -107,55 +107,57 @@ const Site = (props) => {
     setAdministrator("");
     setValidated(false);
   };
+  // INI UNTUK VIEW KE PROFILE BERDASARKAN IDNYA
+
   const handleShowEdit = (id) => {
     setId(id);
-    setShowEdit(true);
+    navigate(`/viewsite/${id}`);
   };
 
   // INI UNTUK UPDATE USER
 
-  const handleUpdate = async () => {
-    // INI UNTUK VALIDASI FORM JUGA NAMUN MANUAL
+  // const handleUpdate = async () => {
+  //   // INI UNTUK VALIDASI FORM JUGA NAMUN MANUAL
 
-    try {
-      // const token = localStorage.getItem("access_token");
+  //   try {
+  //     // const token = localStorage.getItem("access_token");
 
-      const res = await axios.put(
-        `http://172.16.26.97:5000/administrator`,
-        changePassword
-          ? {
-              username: username,
-              email: email,
-              password: password,
-              id: `${id}`,
-            }
-          : {
-              username: username,
-              email: email,
-              id: `${id}`,
-            },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            // Authorization: token,
-          },
-        }
-      );
-      if (res.status === 200) {
-        toast.success("Updated Successfuly.");
-        getApi();
-        setUsername("");
-        setEmail("");
-        setPassword("");
-        setChangePassword("");
-        handleCloseEdit();
-      } else {
-        toast.error("Failed to update user, please try again.");
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  //     const res = await axios.put(
+  //       `http://172.16.26.97:5000/administrator`,
+  //       changePassword
+  //         ? {
+  //             username: username,
+  //             email: email,
+  //             password: password,
+  //             id: `${id}`,
+  //           }
+  //         : {
+  //             username: username,
+  //             email: email,
+  //             id: `${id}`,
+  //           },
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           // Authorization: token,
+  //         },
+  //       }
+  //     );
+  //     if (res.status === 200) {
+  //       toast.success("Updated Successfuly.");
+  //       getApi();
+  //       setUsername("");
+  //       setEmail("");
+  //       setPassword("");
+  //       setChangePassword("");
+  //       handleCloseEdit();
+  //     } else {
+  //       toast.error("Failed to update user, please try again.");
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   // INI UNTUK MEMUNCULKAN DAN MENUTUP MODAL REGISTRASI
   const handleShow = () => setShow(true);
@@ -272,7 +274,7 @@ const Site = (props) => {
                 <div className="viewButtonOperator">
                   <RateReviewIcon
                     className="viewIcon"
-                    onClick={() => showModalEditSite(rowData.id)}
+                    onClick={() => handleShowEdit(rowData.id)}
                   />
                 </div>
               </Tooltip>
@@ -374,7 +376,7 @@ const Site = (props) => {
         }
       );
 
-      console.log(response.status);
+      // console.log(response.status);
 
       if (response.status === 200) {
         toast.success("Registered Successfully.");
@@ -425,8 +427,8 @@ const Site = (props) => {
         );
 
         setProfiles(response.data.data);
-        console.log(response.data.data);
-        console.log(JSON.stringify(response.data.data));
+        // console.log(response.data.data);
+        // console.log(JSON.stringify(response.data.data));
       } catch (e) {
         console.log(e);
         console.log("access token sudah expired");
@@ -510,28 +512,28 @@ const Site = (props) => {
 
   // INI UNTUK GET DATA UPDATE
 
-  useEffect(() => {
-    const accessToken = localStorage.getItem("access_token");
-    const refreshToken = localStorage.getItem("refresh_token");
-    axios
-      .get(`http://172.16.26.97:5000/site/${idSite}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: accessToken,
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-        setIdSite(res.data.id);
-        setSiteNameEdit(res.data.name);
-        setLatitudeEdit(res.data.latitude);
-        setLongtitudeEdit(res.data.longtitude);
-        setLandingNameEdit(res.data.landing_name);
-        setSelectedProfileIdEdit(res.data.profile_id);
-        setSelectedProfileEdit(res.data.profile_info.name);
-      })
-      .catch((err) => console.log(err));
-  }, [idSite]);
+  // useEffect(() => {
+  //   const accessToken = localStorage.getItem("access_token");
+  //   const refreshToken = localStorage.getItem("refresh_token");
+  //   axios
+  //     .get(`http://172.16.26.97:5000/site/${idSite}`, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: accessToken,
+  //       },
+  //     })
+  //     .then((res) => {
+  //       // console.log(res.data);
+  //       setIdSite(res.data.id);
+  //       setSiteNameEdit(res.data.name);
+  //       setLatitudeEdit(res.data.latitude);
+  //       setLongtitudeEdit(res.data.longtitude);
+  //       setLandingNameEdit(res.data.landing_name);
+  //       setSelectedProfileIdEdit(res.data.profile_id);
+  //       setSelectedProfileEdit(res.data.profile_info.name);
+  //     })
+  //     .catch((err) => console.log(err));
+  // }, [idSite]);
 
   return (
     <>
@@ -645,7 +647,7 @@ const Site = (props) => {
                 </div>
               </form>
             </Modal>
-            <Modal
+            {/* <Modal
               title="Update Site"
               open={isModalOpenEditSite}
               onOk={handleSubmitEditSite}
@@ -689,7 +691,7 @@ const Site = (props) => {
                   <input value={selectedProfileEdit} disabled></input>
                 </div>
               </form>
-            </Modal>
+            </Modal> */}
           </div>
           <div className="mapContainer">
             <div className="mapContent">

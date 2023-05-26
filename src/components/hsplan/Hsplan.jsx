@@ -68,7 +68,7 @@ const Hsplan = () => {
   const [enable_uptime, setEnable_Uptime] = useState(false);
   const [userData, setUserData] = useState({});
   const [isNameEmpty, setIsNameEmpty] = useState(false);
-  const handleRefreshToken = useHandleRefreshToken();
+  // const handleRefreshToken = useHandleRefreshToken();
   const [loading, setLoading] = useState(true);
   const [changePassword, setChangePassword] = useState(false);
   const [id, setId] = useState("");
@@ -222,7 +222,7 @@ const Hsplan = () => {
           toast.error("Plan already exists!");
         } else {
           setError("Failed to register, please try again.");
-          await handleRefreshToken();
+          // await handleRefreshToken();
         }
       }
     }
@@ -251,7 +251,7 @@ const Hsplan = () => {
         console.log(JSON.stringify(response.data.data));
       } catch (e) {
         console.log(e);
-        await handleRefreshToken();
+        // await handleRefreshToken();
         console.log("access token sudah expired");
       }
     };
@@ -310,7 +310,7 @@ const Hsplan = () => {
         getApi();
       } else {
         toast.error("Failed to delete user, please try again.");
-        await handleRefreshToken();
+        // await handleRefreshToken();
       }
     } catch (err) {
       if (error.response && error.response.status === 401) {
@@ -319,7 +319,7 @@ const Hsplan = () => {
         toast.error("Plan Type Used!");
       } else {
         setError("Failed to register, please try again.");
-        await handleRefreshToken();
+        // await handleRefreshToken();
       }
     }
   };

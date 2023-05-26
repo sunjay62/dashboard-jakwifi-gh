@@ -58,7 +58,7 @@ const Hsserver = () => {
   const [template, setTemplate] = useState("");
   const [profile, setProfile] = useState([]);
   const [loading, setLoading] = useState(true);
-  const handleRefreshToken = useHandleRefreshToken();
+  // const handleRefreshToken = useHandleRefreshToken();
   const [file, setFile] = useState("");
   const [isNameEmpty, setIsNameEmpty] = useState(false);
   const [id, setId] = useState("");
@@ -125,7 +125,7 @@ const Hsserver = () => {
         console.log(JSON.stringify(response.data.data));
       } catch (e) {
         console.log(e);
-        await handleRefreshToken();
+        // await handleRefreshToken();
         console.log("access token sudah expired");
       }
     };
@@ -156,7 +156,7 @@ const Hsserver = () => {
         console.log(JSON.stringify(response.data.data));
       } catch (e) {
         console.log(e);
-        await handleRefreshToken();
+        // await handleRefreshToken();
         console.log("access token sudah expired");
       }
     };
@@ -190,14 +190,14 @@ const Hsserver = () => {
         getApi();
       } else {
         toast.error("Failed to delete user, please try again.");
-        await handleRefreshToken();
+        // await handleRefreshToken();
       }
     } catch (err) {
       if (error.response && error.response.status === 401) {
         // toast.error("You not have access!");
       } else {
         setError("Failed to register, please try again.");
-        await handleRefreshToken();
+        // await handleRefreshToken();
       }
     }
   };

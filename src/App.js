@@ -16,6 +16,7 @@ import Hsplan from "./components/hsplan/Hsplan";
 import Viewprofile from "./components/viewprofile/Viewprofile";
 import Testing from "./components/testingdisable/Testing";
 import Hsserver from "./components/hsserver/Hsserver";
+import Viewsite from "./components/viewsite/Viewsite";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
             <Route path="/verification" element={<Detectobject />} />
             <Route path="/viewreseller/:id" element={<Viewreseller />} />
             <Route path="/viewprofile/:id" element={<Viewprofile />} />
+            <Route path="/viewsite/:id" element={<Viewsite />} />
             <Route path="/hotspot/server" element={<Hsserver />} />
           </Route>
         </Routes>

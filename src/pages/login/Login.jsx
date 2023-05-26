@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useContext } from "react";
+import { useRef, useState, useEffect } from "react";
 import "./login.scss";
 import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
@@ -16,38 +16,6 @@ import {
 import { fontSize } from "@mui/system";
 import Cookies from "js-cookie";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-
-// //INI UNTUK REMEMBER ME
-// const rememberCheckbox = document.getElementById("remember");
-// const usernameInput = document.getElementById("username");
-// const passwordInput = document.getElementById("password");
-
-// // Set the initial state of the "remember me" checkbox based on saved data
-// rememberCheckbox.checked = localStorage.getItem("remember") === "true";
-// usernameInput.value = localStorage.getItem("username") || "";
-// passwordInput.value = localStorage.getItem("password") || "";
-
-// // Save the "remember me" state and the username/password fields when the form is submitted
-// document.querySelector("form").addEventListener("submit", (event) => {
-//   if (rememberCheckbox.checked) {
-//     localStorage.setItem("remember", "true");
-//     localStorage.setItem("username", usernameInput.value);
-//     localStorage.setItem("password", passwordInput.value);
-//   } else {
-//     localStorage.removeItem("remember");
-//     localStorage.removeItem("username");
-//     localStorage.removeItem("password");
-//   }
-// });
-
-// // Update the "remember me" state when the checkbox is clicked
-// rememberCheckbox.addEventListener("click", () => {
-//   if (rememberCheckbox.checked) {
-//     localStorage.setItem("remember", "true");
-//   } else {
-//     localStorage.removeItem("remember");
-//   }
-// });
 
 const Login = () => {
   const userRef = useRef();
@@ -88,16 +56,7 @@ const Login = () => {
       console.log(data);
 
       if (data.status === 200) {
-        // ini untuk set jwt di dalam cookie, dan cookie akan terhapus jika browser di close
-
-        Cookies.set("access_token", data.data.access_token, {
-          expires: 0, // mengatur cookie expire ke 0
-          sameSite: "strict",
-          secure: true,
-        });
-        console.log(Cookies);
-        localStorage.setItem("access_token", data.data.access_token);
-        localStorage.setItem("refresh_token", data.data.refresh_token);
+        setTokens(data.data.access_token, data.data.refresh_token);
         navigate("/home");
         console.log(data);
       } else {
@@ -111,13 +70,93 @@ const Login = () => {
     }
   };
 
-  //untuk login with enter
+  const setTokens = (accessToken, refreshToken) => {
+    // Set access token in local storage
+    localStorage.setItem("access_token", accessToken);
 
+    // Set refresh token in local storage
+    localStorage.setItem("refresh_token", refreshToken);
+
+    // Schedule a timeout to refresh the access token before it expires
+    const tokenExpiration = parseJwt(accessToken).exp * 1000; // Expiration time in milliseconds
+    const currentTime = Date.now();
+    const timeUntilExpiration = tokenExpiration - currentTime;
+    const refreshTime = timeUntilExpiration - 60000; // Refresh the token 1 minute before it expires
+
+    if (refreshTokenTimeoutId) {
+      clearTimeout(refreshTokenTimeoutId);
+    }
+
+    const timeoutId = setTimeout(refreshAccessToken, refreshTime);
+    setRefreshTokenTimeoutId(timeoutId);
+  };
+
+  const parseJwt = (token) => {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map(function (c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join("")
+    );
+
+    return JSON.parse(jsonPayload);
+  };
+
+  const refreshAccessToken = async () => {
+    try {
+      const refreshToken = localStorage.getItem("refresh_token");
+      const response = await axios.post(
+        "http://172.16.26.97:5000/administrator/refresh_token",
+        {
+          refresh_token: refreshToken,
+        }
+      );
+
+      const { access_token, refresh_token } = response.data;
+
+      // Update access token in local storage
+      localStorage.setItem("access_token", access_token);
+
+      // Update refresh token in local storage if a new refresh token is provided
+      if (refresh_token) {
+        localStorage.setItem("refresh_token", refresh_token);
+      }
+
+      // Set the new access token in the axios default headers
+      axios.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
+    } catch (error) {
+      console.log("Failed to refresh access token:", error);
+      // Handle error, such as logging out the user
+    }
+  };
+  // Handle login with Enter key press
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       handleLogin(e);
     }
   };
+
+  // Add interceptor to handle 401 errors
+  useEffect(() => {
+    const interceptor = axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response && error.response.status === 401) {
+          refreshAccessToken();
+        }
+        return Promise.reject(error);
+      }
+    );
+
+    // Cleanup interceptor on unmount
+    return () => {
+      axios.interceptors.response.eject(interceptor);
+    };
+  }, []);
 
   return (
     <div className="container">
@@ -160,7 +199,6 @@ const Login = () => {
                       required="required"
                       onKeyDown={handleKeyDown} // Handle Enter key press
                     />
-
                     <span>Password</span>
                     <i></i>
                   </div>
@@ -173,7 +211,7 @@ const Login = () => {
                         onChange={handleRememberMeChange}
                         checked={remember}
                       />
-                      <label for="remember">&nbsp;&nbsp;Remember me</label>
+                      <label htmlFor="remember">&nbsp;&nbsp;Remember me</label>
                     </div>
                     <div className="forget">
                       <a href="#">Sign Up</a>

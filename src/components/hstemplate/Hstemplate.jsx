@@ -47,7 +47,7 @@ const Hstemplate = () => {
   const navigate = useNavigate();
   const [template, setTemplate] = useState("template1");
   const [users, setUsers] = useState([]);
-  const handleRefreshToken = useHandleRefreshToken();
+  // const handleRefreshToken = useHandleRefreshToken();
   const [name, setName] = useState("");
   const [expired, setExpired] = useState("");
   const [kuota, setKuota] = useState("");
@@ -512,7 +512,7 @@ const Hstemplate = () => {
         console.log(JSON.stringify(response.data.data));
       } catch (e) {
         console.log(e);
-        await handleRefreshToken();
+        // await handleRefreshToken();
         console.log("access token sudah expired");
       }
     };
@@ -543,7 +543,7 @@ const Hstemplate = () => {
         console.log(JSON.stringify(response.data.data));
       } catch (e) {
         console.log(e);
-        await handleRefreshToken();
+        // await handleRefreshToken();
         console.log("access token sudah expired");
       }
     };
@@ -577,14 +577,14 @@ const Hstemplate = () => {
         getApi();
       } else {
         toast.error("Failed to delete user, please try again.");
-        await handleRefreshToken();
+        // await handleRefreshToken();
       }
     } catch (err) {
       if (error.response && error.response.status === 401) {
         // toast.error("You not have access!");
       } else {
         setError("Failed to register, please try again.");
-        await handleRefreshToken();
+        // await handleRefreshToken();
       }
     }
   };
@@ -669,9 +669,11 @@ const Hstemplate = () => {
     setId(id);
     setIsModalOpen(true);
   };
+
   const handleOk = () => {
     setIsModalOpen(false);
   };
+
   const handleCancel = () => {
     setIsModalOpen(false);
     setSelectedExpired("seconds");

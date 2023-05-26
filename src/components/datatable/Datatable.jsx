@@ -84,7 +84,7 @@ const Datatable = (props) => {
   const [id, setId] = useState("");
   const [changePassword, setChangePassword] = useState(false);
   const [showText, setShowText] = useState(false);
-  const handleRefreshToken = useHandleRefreshToken();
+  // const handleRefreshToken = useHandleRefreshToken();
 
   // UNTUK KE HALAMAN ADD CLIENT
   const toClient = () => {
@@ -155,7 +155,7 @@ const Datatable = (props) => {
       }
     } catch (err) {
       console.log(err);
-      await handleRefreshToken();
+      // await handleRefreshToken();
     }
   };
 
@@ -189,7 +189,7 @@ const Datatable = (props) => {
         setUsers(res.data.data);
       } catch (e) {
         console.log("access token sudah expired");
-        await handleRefreshToken();
+        // await handleRefreshToken();
       }
     };
 
@@ -213,7 +213,7 @@ const Datatable = (props) => {
         setUsers(res.data.data);
       } catch (err) {
         console.log(err);
-        await handleRefreshToken();
+        // await handleRefreshToken();
       }
     };
     fetchAllUsers();
@@ -242,7 +242,7 @@ const Datatable = (props) => {
       }
     } catch (err) {
       console.log(err);
-      await handleRefreshToken();
+      // await handleRefreshToken();
     }
   };
 
